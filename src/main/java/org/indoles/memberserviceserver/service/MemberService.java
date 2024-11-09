@@ -2,6 +2,7 @@ package org.indoles.memberserviceserver.service;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.indoles.memberserviceserver.domain.Member;
 import org.indoles.memberserviceserver.dto.request.SignInRequestInfo;
 import org.indoles.memberserviceserver.dto.request.SignUpRequestInfo;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.indoles.memberserviceserver.entity.exception.MemberExceptionCode.*;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -23,30 +25,40 @@ public class MemberService {
 
     @Transactional
     public void signUp(SignUpRequestInfo signUpRequestInfo) {
-        if (memberRepository.existsBySignInId(signUpRequestInfo.signUpId())) {
-            throw new MemberException(ALREADY_EXISTS);
-        }
-        Member member = Member.createMemberWithRole(
-                signUpRequestInfo.signUpId(),
-                signUpRequestInfo.password(),
-                signUpRequestInfo.userRole()
-        );
+        try {
+            if (memberRepository.existsBySignInId(signUpRequestInfo.signUpId())) {
+                throw new MemberException(ALREADY_EXISTS);
+            }
+            Member member = Member.createMemberWithRole(
+                    signUpRequestInfo.signUpId(),
+                    signUpRequestInfo.password(),
+                    signUpRequestInfo.userRole()
+            );
 
-        MemberEntity memberEntity = Member.toEntity(member);
-        memberRepository.save(memberEntity);
+            MemberEntity memberEntity = Member.toEntity(member);
+            memberRepository.save(memberEntity);
+        } catch (Exception e) {
+            log.error("회원가입 중 오류 발생", e);
+            throw e;
+        }
     }
 
     public SignInResponseInfo signIn(SignInRequestInfo signInRequestInfo) {
-        MemberEntity memberEntity = memberRepository.findBySignInId(signInRequestInfo.signInId())
-                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+        try {
+            MemberEntity memberEntity = memberRepository.findBySignInId(signInRequestInfo.signInId())
+                    .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
 
-        // MemberEntity -> Member로 변환
-        Member member = memberEntity.toDomain();
+            // MemberEntity -> Member로 변환
+            Member member = memberEntity.toDomain();
 
-        if (!member.confirmPassword(signInRequestInfo.password())) {
-            throw new MemberException(WRONG_PASSWORD);
+            if (!member.confirmPassword(signInRequestInfo.password())) {
+                throw new MemberException(WRONG_PASSWORD);
+            }
+
+            return new SignInResponseInfo(member.getId(), member.getRole());
+        } catch (Exception e) {
+            log.error("로그인 중 오류 발생", e);
+            throw e;
         }
-
-        return new SignInResponseInfo(member.getId(), member.getRole());
     }
 }
