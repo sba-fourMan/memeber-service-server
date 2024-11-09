@@ -1,4 +1,4 @@
-package org.indoles.memberserviceserver.dto;
+package org.indoles.memberserviceserver.dto.request;
 
 import org.indoles.memberserviceserver.entity.exception.MemberException;
 import org.indoles.memberserviceserver.entity.exception.MemberExceptionCode;
