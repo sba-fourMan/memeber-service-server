@@ -6,13 +6,13 @@ import java.util.Objects;
 
 import static org.indoles.memberserviceserver.entity.exception.MemberExceptionCode.*;
 
-public record SiginUpRequest(
+public record SignUpRequestInfo(
         String signUpId,
         String password,
         String userRole
 ) {
 
-    public SiginUpRequest {
+    public SignUpRequestInfo {
         validateNotNull(signUpId, "회원가입 ID");
         validateNotNull(password, "회원가입 패스워드");
         validateNotNull(userRole, "사용자 역할");

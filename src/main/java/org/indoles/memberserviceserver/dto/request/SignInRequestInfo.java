@@ -5,9 +5,12 @@ import org.indoles.memberserviceserver.entity.exception.MemberExceptionCode;
 
 import java.util.Objects;
 
-public record SignInRequest(String signInId, String password) {
+public record SignInRequestInfo(
+        String signInId,
+        String password
+) {
 
-    public SignInRequest {
+    public SignInRequestInfo {
         validateNotNull(signInId, "아이디");
         validateNotNull(password, "비밀번호");
     }

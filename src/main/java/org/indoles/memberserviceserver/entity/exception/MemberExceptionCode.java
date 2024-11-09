@@ -23,7 +23,9 @@ public enum MemberExceptionCode implements ExceptionCode {
     PASSWORD_LOWERCASE_REQUIRED(BAD_REQUEST, "MEM-010", "비밀번호는 소문자를 포함해야 합니다."),
     PASSWORD_VALID_CHARACTERS(BAD_REQUEST, "MEM-011", "비밀번호는 영문자와 숫자만 사용해야 합니다."),
     FIELD_CANNOT_BE_NULL(BAD_REQUEST, "MEM-012", "%s은(는) 필수 입력 값 입니다."),
-
+    ALREADY_EXISTS(BAD_REQUEST, "MEM-013", "이미 존재하는 회원입니다."),
+    MEMBER_NOT_FOUND(NOT_FOUND, "MEM-014", "회원을 찾을 수 없습니다."),
+    WRONG_PASSWORD(BAD_REQUEST, "MEM-015", "패스워드가 일치하지 않습니다.."),
     ;
 
     private final HttpStatus httpStatus;

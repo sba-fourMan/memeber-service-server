@@ -1,6 +1,5 @@
 package org.indoles.memberserviceserver.domain.validate;
 
-import org.indoles.memberserviceserver.dto.SignInRequest;
 import org.indoles.memberserviceserver.entity.exception.MemberException;
 import org.indoles.memberserviceserver.entity.exception.MemberExceptionCode;
 
@@ -54,10 +53,5 @@ public class ValidateMember {
         if (!PASSWORD_VALID_CHARACTERS.matcher(password).matches()) {
             throw new MemberException(MemberExceptionCode.PASSWORD_VALID_CHARACTERS);
         }
-    }
-
-    public void validateSignIn(SignInRequest signInRequest) {
-        validateSignInId(signInRequest.signInId());
-        validateSignInPassword(signInRequest.password());
     }
 }
