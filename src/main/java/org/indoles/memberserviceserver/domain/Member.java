@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.indoles.memberserviceserver.domain.validate.ValidateMember;
+import org.indoles.memberserviceserver.entity.MemberEntity;
 import org.indoles.memberserviceserver.entity.enums.Role;
 
 @Getter
@@ -88,4 +89,32 @@ public class Member {
         return role.equals(Role.BUYER);
     }
 
+    /**
+     * 초기 사용자 생성
+     */
+
+    public static Member createMemberWithRole(
+            String signInId,
+            String password,
+            String userRole
+    ) {
+        Role role = Role.find(userRole);
+
+        return Member.builder()
+                .signInId(signInId)
+                .password(password)
+                .role(role)
+                .point(new Point(0L))
+                .build();
+    }
+
+    public static MemberEntity toEntity(Member member) {
+        return MemberEntity.builder()
+                .id(member.getId())
+                .signInId(member.getSignInId())
+                .password(member.getPassword())
+                .role(member.getRole())
+                .point(member.getPoint().getValue())
+                .build();
+    }
 }

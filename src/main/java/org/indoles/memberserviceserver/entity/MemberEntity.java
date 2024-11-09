@@ -2,6 +2,8 @@ package org.indoles.memberserviceserver.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.indoles.memberserviceserver.domain.Member;
+import org.indoles.memberserviceserver.domain.Point;
 import org.indoles.memberserviceserver.entity.enums.Role;
 
 @Getter
@@ -41,5 +43,15 @@ public class MemberEntity {
         this.password = password;
         this.role = role;
         this.point = point;
+    }
+
+    public Member toDomain() {
+        return Member.builder()
+                .id(this.id)
+                .signInId(this.signInId)
+                .password(this.password)
+                .role(this.role)
+                .point(new Point(this.point))
+                .build();
     }
 }
