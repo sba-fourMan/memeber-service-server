@@ -25,4 +25,17 @@ public class Point {
         validatePoint.validatePlusPoint(amount, price);
         amount += price;
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Point point = (Point) o;
+        return amount != null && amount.equals(point.amount);
+    }
 }
