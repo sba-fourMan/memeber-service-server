@@ -1,5 +1,6 @@
 package org.indoles.memberserviceserver.domain.validate;
 
+import org.indoles.memberserviceserver.dto.SignInRequest;
 import org.indoles.memberserviceserver.entity.exception.MemberException;
 import org.indoles.memberserviceserver.entity.exception.MemberExceptionCode;
 
@@ -14,7 +15,6 @@ public class ValidateMember {
     private static final Pattern PASSWORD_DIGIT_REQUIRED = Pattern.compile(".*[0-9].*");
     private static final Pattern PASSWORD_LOWERCASE_REQUIRED = Pattern.compile(".*[a-z].*");
     private static final Pattern PASSWORD_VALID_CHARACTERS = Pattern.compile("^[a-zA-Z0-9]*$");
-
 
     /**
      * 아이디 유효성 검사
@@ -34,7 +34,7 @@ public class ValidateMember {
      * 비밀번호 유효성 검사
      */
 
-    public void validatePassword(String password) {
+    public void validateSignInPassword(String password) {
         if (password == null || password.isBlank()) {
             throw new MemberException(MemberExceptionCode.PASSWORD_IS_BLANK);
         }
@@ -54,5 +54,10 @@ public class ValidateMember {
         if (!PASSWORD_VALID_CHARACTERS.matcher(password).matches()) {
             throw new MemberException(MemberExceptionCode.PASSWORD_VALID_CHARACTERS);
         }
+    }
+
+    public void validateSignIn(SignInRequest signInRequest) {
+        validateSignInId(signInRequest.signInId());
+        validateSignInPassword(signInRequest.password());
     }
 }

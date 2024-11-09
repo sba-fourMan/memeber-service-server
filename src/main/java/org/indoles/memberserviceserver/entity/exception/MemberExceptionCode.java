@@ -22,6 +22,8 @@ public enum MemberExceptionCode implements ExceptionCode {
     PASSWORD_DIGIT_REQUIRED(BAD_REQUEST, "MEM-009", "비밀번호는 숫자를 포함해야 합니다."),
     PASSWORD_LOWERCASE_REQUIRED(BAD_REQUEST, "MEM-010", "비밀번호는 소문자를 포함해야 합니다."),
     PASSWORD_VALID_CHARACTERS(BAD_REQUEST, "MEM-011", "비밀번호는 영문자와 숫자만 사용해야 합니다."),
+    FIELD_CANNOT_BE_NULL(BAD_REQUEST, "MEM-012", "%s은(는) 필수 입력 값 입니다."),
+
     ;
 
     private final HttpStatus httpStatus;

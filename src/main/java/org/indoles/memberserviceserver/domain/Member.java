@@ -29,7 +29,7 @@ public class Member {
         ValidateMember validateMember = new ValidateMember();
 
         validateMember.validateSignInId(signInId);
-        validateMember.validatePassword(password);
+        validateMember.validateSignInPassword(password);
 
         this.id = id;
         this.signInId = signInId;
