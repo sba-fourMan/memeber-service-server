@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.indoles.memberserviceserver.entity.exception.MemberException;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
@@ -39,4 +40,11 @@ public enum Role {
     private static final Map<String, Role> roleMap =
             Collections.unmodifiableMap(Stream.of(values())
                     .collect(Collectors.toMap(Role::getDescription, Function.identity())));
+
+    public static Role find(final String userRole) {
+        return Arrays.stream(values())
+                .filter(role -> role.name().equals(userRole))
+                .findAny()
+                .orElseThrow(() -> new MemberException(ROLE_NOT_FOUND, userRole));
+    }
 }
