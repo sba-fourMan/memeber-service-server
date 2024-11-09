@@ -1,6 +1,7 @@
 package org.indoles.memberserviceserver.domain;
 
 import lombok.Getter;
+import org.indoles.memberserviceserver.domain.validate.ValidatePoint;
 import org.indoles.memberserviceserver.entity.exception.MemberException;
 import org.indoles.memberserviceserver.entity.exception.MemberExceptionCode;
 
@@ -8,28 +9,22 @@ import org.indoles.memberserviceserver.entity.exception.MemberExceptionCode;
 public class Point {
 
     private Long amount;
+    private final ValidatePoint validator = new ValidatePoint();
 
     public Point(Long amount) {
+        validator.validatePositiveAmount(amount);
         this.amount = amount;
     }
 
-    public void validateMinusPoint(Long minusAmount) {
-        if (amount < minusAmount) {
-            throw new MemberException(MemberExceptionCode.POINT_NOT_ENOUGH, minusAmount);
-        }
+    public void minus(Long minusAmount) {
+        validator.validatePositiveAmount(minusAmount);
+        validator.validateMinusPoint(amount, minusAmount);
         amount -= minusAmount;
     }
 
-    public void validatePlusPoint(Long price) {
-        if (price > 0 && amount > Long.MAX_VALUE - price) {
-            throw new MemberException(MemberExceptionCode.POINT_OVER_MAX, price);
-        }
+    public void plus(Long price) {
+        validator.validatePositiveAmount(price);
+        validator.validatePlusPoint(amount, price);
         amount += price;
-    }
-
-    public void validatePositiveAmount(Long amount) {
-        if (amount < 0) {
-            throw new MemberException(MemberExceptionCode.NUMBER_NOT_POSITIVE, amount);
-        }
     }
 }
