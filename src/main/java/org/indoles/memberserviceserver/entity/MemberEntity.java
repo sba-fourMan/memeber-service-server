@@ -2,6 +2,7 @@ package org.indoles.memberserviceserver.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.indoles.memberserviceserver.entity.enums.Role;
 
 @Getter
 @Entity
