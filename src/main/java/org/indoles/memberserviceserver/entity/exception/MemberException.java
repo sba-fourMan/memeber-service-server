@@ -1,7 +1,7 @@
 package org.indoles.memberserviceserver.entity.exception;
 
-import org.indoles.memberserviceserver.common.BusinessException;
-import org.indoles.memberserviceserver.common.ExceptionCode;
+import org.indoles.memberserviceserver.common.exception.BusinessException;
+import org.indoles.memberserviceserver.common.exception.ExceptionCode;
 
 public class MemberException extends BusinessException {
 

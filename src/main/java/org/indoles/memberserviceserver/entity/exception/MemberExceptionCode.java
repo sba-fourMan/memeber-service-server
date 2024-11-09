@@ -2,7 +2,7 @@ package org.indoles.memberserviceserver.entity.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.indoles.memberserviceserver.common.ExceptionCode;
+import org.indoles.memberserviceserver.common.exception.ExceptionCode;
 import org.springframework.http.HttpStatus;
 
 import static org.springframework.http.HttpStatus.*;
@@ -16,4 +16,19 @@ public enum MemberExceptionCode implements ExceptionCode {
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;
+
+    @Override
+    public HttpStatus getStatus() {
+        return httpStatus;
+    }
+
+    @Override
+    public String getCode() {
+        return code;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
 }

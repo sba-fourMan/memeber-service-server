@@ -1,4 +1,4 @@
-package org.indoles.memberserviceserver.common;
+package org.indoles.memberserviceserver.common.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public enum CommonExceptionCode implements ExceptionCode {
     COMMON_METHOD_NOT_ALLOWED(METHOD_NOT_ALLOWED, "COM-003", "허용되지 않은 HTTP Method 요청 발생"),
     COMMON_INTERNAL_SERVER_ERROR(INTERNAL_SERVER_ERROR, "COM-004", "기타 서버 내부 에러 발생");
 
-    private final HttpStatus httpStatus;
+    private final HttpStatus status;
     private final String code;
     private final String message;
 }

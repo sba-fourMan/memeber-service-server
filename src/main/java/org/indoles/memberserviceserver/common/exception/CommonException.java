@@ -1,4 +1,4 @@
-package org.indoles.memberserviceserver.common;
+package org.indoles.memberserviceserver.common.exception;
 
 public class CommonException extends BusinessException {
 

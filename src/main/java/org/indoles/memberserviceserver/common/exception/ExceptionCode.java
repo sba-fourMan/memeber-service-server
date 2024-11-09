@@ -1,12 +1,12 @@
-package org.indoles.memberserviceserver.common;
+package org.indoles.memberserviceserver.common.exception;
 
 import org.springframework.http.HttpStatus;
 
 public interface ExceptionCode {
 
-    HttpStatus getHttpStatus();
+    HttpStatus getStatus();
 
-    Integer getCode();
+    String getCode();
 
     String getMessage();
 }
