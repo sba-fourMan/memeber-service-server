@@ -2,15 +2,14 @@ package org.indoles.memberserviceserver.dto.response;
 
 import org.indoles.memberserviceserver.entity.enums.Role;
 import org.indoles.memberserviceserver.entity.exception.MemberException;
-import org.indoles.memberserviceserver.entity.exception.MemberExceptionCode;
 
 import java.util.Objects;
 
 import static org.indoles.memberserviceserver.entity.exception.MemberExceptionCode.*;
 
-public record SignInResponseInfo(Long id, Role role) {
+public record SignInInfo(Long id, Role role) {
 
-    public SignInResponseInfo {
+    public SignInInfo {
         validateNotNull(id, "로그인한 사용자의 식별자");
         validateNotNull(role, "로그인한 사용자의 역할");
     }
