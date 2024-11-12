@@ -9,7 +9,7 @@ pipeline {
         ECR_REPO_URL = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}"
         EC2_INSTANCE_ID = '' // 생성한 EC2 인스턴스 ID를 저장할 변수
         PRIVATE_IP = ''
-        SSH_KEY_PATH = '/path/to/your/private-key.pem'
+        SSH_KEY_PATH = 'dev-app.pem'
         BASTION_HOST = '3.34.53.44' // Bastion Host의 공인 IP
         BASTION_SSH_KEY_PATH = '/dev-app.pem' // Bastion Host 접속 키
     }
