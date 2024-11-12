@@ -15,6 +15,15 @@ pipeline {
     }
 
     stages {
+        stage('Check AWS Identity') {
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS Jenkins Access Key']]) {
+                    sh 'aws sts get-caller-identity'
+                }
+            }
+        }
+
+    stages {
         stage('Clone Repository') {
             steps {
                 git url: 'https://github.com/sba-fourMan/memeber-service-server', branch: 'dev'
