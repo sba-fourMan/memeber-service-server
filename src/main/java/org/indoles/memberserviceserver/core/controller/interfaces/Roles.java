@@ -1,6 +1,6 @@
 package org.indoles.memberserviceserver.core.controller.interfaces;
 
-import org.indoles.memberserviceserver.core.entity.enums.Role;
+import org.indoles.memberserviceserver.core.domain.enums.Role;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
