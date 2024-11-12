@@ -22,6 +22,7 @@ pipeline {
                 }
             }
         }
+    }
 
     stages {
         stage('Clone Repository') {
