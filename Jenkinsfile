@@ -22,9 +22,7 @@ pipeline {
                 }
             }
         }
-    }
 
-    stages {
         stage('Clone Repository') {
             steps {
                 git url: 'https://github.com/sba-fourMan/memeber-service-server', branch: 'dev'
