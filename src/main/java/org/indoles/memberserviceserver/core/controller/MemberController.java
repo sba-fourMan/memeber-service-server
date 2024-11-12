@@ -1,12 +1,11 @@
 package org.indoles.memberserviceserver.core.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.indoles.memberserviceserver.core.controller.interfaces.Login;
 import org.indoles.memberserviceserver.core.controller.interfaces.Roles;
-import org.indoles.memberserviceserver.core.dto.request.MemberChargePointRequest;
-import org.indoles.memberserviceserver.core.dto.request.SignInRequestInfo;
-import org.indoles.memberserviceserver.core.dto.request.SignUpRequestInfo;
+import org.indoles.memberserviceserver.core.dto.*;
 import org.indoles.memberserviceserver.core.domain.enums.Role;
-import org.indoles.memberserviceserver.core.dto.response.SignInInfo;
 import org.indoles.memberserviceserver.core.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,11 +37,12 @@ public class MemberController {
      */
 
     @PostMapping("/signin")
-    public ResponseEntity<Void> signIn(@RequestBody SignInRequestInfo request) {
-        memberService.signIn(request);
+    public ResponseEntity<SignInResponseInfo> signin(@RequestBody SignInRequestInfo request, HttpSession session) {
+        SignInInfo signInInfo = memberService.signIn(request);
+        session.setAttribute("signInMember", signInInfo);
 
-        return ResponseEntity.ok()
-                .build();
+        SignInResponseInfo signInResponseInfo = new SignInResponseInfo(signInInfo.role());
+        return ResponseEntity.ok(signInResponseInfo);
     }
 
     /**
@@ -50,9 +50,9 @@ public class MemberController {
      */
 
     @PostMapping("/signout")
-    public ResponseEntity<Void> signOut() {
-        return ResponseEntity.ok()
-                .build();
+    public ResponseEntity<Void> signout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -61,10 +61,9 @@ public class MemberController {
 
     @Roles({Role.BUYER, Role.SELLER})
     @PostMapping("/points/charge")
-    public ResponseEntity<Void> chargePoint(@RequestBody MemberChargePointRequest request) {
-        SignInInfo memberInfo = new SignInInfo(request.memberId(), request.role());
-
-        memberService.chargePoint(memberInfo, request.amount());
+    public ResponseEntity<Void> chargePoint(@Login SignInInfo memberInfo,
+                                            @RequestBody MemberChargePointCommand command) {
+        memberService.chargePoint(memberInfo, command.amount());
         return ResponseEntity.ok().build();
     }
 }
