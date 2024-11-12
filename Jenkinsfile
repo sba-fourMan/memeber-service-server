@@ -50,6 +50,7 @@ pipeline {
     post {
         always {
             sh "docker rmi ${ECR_REPO_URL}:${IMAGE_TAG} || true"
+            sh "rm -rf build/libs/*.jar"
         }
     }
 }
