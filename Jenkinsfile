@@ -25,7 +25,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${ECR_REPO_URL}:${IMAGE_TAG} ~/Dockerfile/Dev-member/Dockerfile"
+                    sh "docker build -t ${ECR_REPO_URL}:${IMAGE_TAG} -f ~/Dockerfile/Dev-member/Dockerfile"
                 }
             }
         }
