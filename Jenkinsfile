@@ -7,11 +7,6 @@ pipeline {
         IMAGE_TAG = "${env.BUILD_NUMBER}" // 이미지 태그 (빌드 번호)
         AWS_ACCOUNT_ID = '703671902880' // AWS 계정 ID
         ECR_REPO_URL = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}"
-        EC2_INSTANCE_ID = '' // 생성한 EC2 인스턴스 ID를 저장할 변수
-        PRIVATE_IP = ''
-        SSH_KEY_PATH = 'dev-app.pem' // EC2 접속 키
-        BASTION_HOST = '3.34.53.44' // Bastion Host의 공인 IP
-        BASTION_SSH_KEY_PATH = '/dev-app.pem' // Bastion Host 접속 키
     }
 
     stages {
