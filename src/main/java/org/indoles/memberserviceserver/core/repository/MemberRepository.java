@@ -1,15 +1,19 @@
 package org.indoles.memberserviceserver.core.repository;
 
+import org.indoles.memberserviceserver.core.domain.Member;
 import org.indoles.memberserviceserver.core.entity.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
+public interface MemberRepository {
 
-    boolean existsBySignInId(String signInId);
+    boolean isExist(String signInId);
 
-    Optional<MemberEntity> findById(Long id);
+    Member save(Member member);
 
-    Optional<MemberEntity> findBySignInId(String signInId);
+    Optional<Member> findById(Long id);
+
+    Optional<Member> findBySignInId(String signInId);
 }
+

@@ -5,7 +5,7 @@ import org.indoles.memberserviceserver.core.controller.interfaces.Roles;
 import org.indoles.memberserviceserver.core.dto.request.MemberChargePointRequest;
 import org.indoles.memberserviceserver.core.dto.request.SignInRequestInfo;
 import org.indoles.memberserviceserver.core.dto.request.SignUpRequestInfo;
-import org.indoles.memberserviceserver.core.entity.enums.Role;
+import org.indoles.memberserviceserver.core.domain.enums.Role;
 import org.indoles.memberserviceserver.core.dto.response.SignInInfo;
 import org.indoles.memberserviceserver.core.service.MemberService;
 import org.springframework.http.ResponseEntity;
