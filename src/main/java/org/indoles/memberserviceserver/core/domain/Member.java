@@ -4,9 +4,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.indoles.memberserviceserver.core.domain.enums.Role;
 import org.indoles.memberserviceserver.core.domain.validate.ValidateMember;
-import org.indoles.memberserviceserver.core.entity.MemberEntity;
-import org.indoles.memberserviceserver.core.entity.enums.Role;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -105,16 +104,6 @@ public class Member {
                 .password(password)
                 .role(role)
                 .point(new Point(0L))
-                .build();
-    }
-
-    public static MemberEntity toEntity(Member member) {
-        return MemberEntity.builder()
-                .id(member.getId())
-                .signInId(member.getSignInId())
-                .password(member.getPassword())
-                .role(member.getRole())
-                .point(member.getPoint().getValue())
                 .build();
     }
 }
