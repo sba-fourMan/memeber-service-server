@@ -18,6 +18,7 @@ pipeline {
         stage('Check AWS Identity') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS Jenkins Access Key']]) {
+                    sh 'env' 
                     sh 'aws sts get-caller-identity'
                 }
             }
