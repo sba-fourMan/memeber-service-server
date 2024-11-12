@@ -2,6 +2,8 @@ package org.indoles.memberserviceserver.fixture;
 
 import org.indoles.memberserviceserver.core.entity.MemberEntity;
 
+import static org.indoles.memberserviceserver.core.domain.enums.Role.BUYER;
+
 public class MemberFixture {
 
     public static MemberEntity memberBuild() {
