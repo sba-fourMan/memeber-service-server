@@ -1,10 +1,10 @@
-package org.indoles.memberserviceserver.entity;
+package org.indoles.memberserviceserver.core.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.indoles.memberserviceserver.domain.Member;
-import org.indoles.memberserviceserver.domain.Point;
-import org.indoles.memberserviceserver.entity.enums.Role;
+import org.indoles.memberserviceserver.core.domain.Member;
+import org.indoles.memberserviceserver.core.domain.Point;
+import org.indoles.memberserviceserver.core.entity.enums.Role;
 
 @Getter
 @Entity

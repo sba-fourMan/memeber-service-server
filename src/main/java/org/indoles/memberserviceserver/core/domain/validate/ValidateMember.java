@@ -1,7 +1,7 @@
-package org.indoles.memberserviceserver.domain.validate;
+package org.indoles.memberserviceserver.core.domain.validate;
 
-import org.indoles.memberserviceserver.entity.exception.MemberException;
-import org.indoles.memberserviceserver.entity.exception.MemberExceptionCode;
+import org.indoles.memberserviceserver.core.entity.exception.MemberException;
+import org.indoles.memberserviceserver.core.entity.exception.MemberExceptionCode;
 
 import java.util.regex.Pattern;
 

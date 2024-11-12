@@ -1,13 +1,13 @@
-package org.indoles.memberserviceserver.controller;
+package org.indoles.memberserviceserver.core.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.indoles.memberserviceserver.controller.interfaces.Roles;
-import org.indoles.memberserviceserver.dto.request.MemberChargePointRequest;
-import org.indoles.memberserviceserver.dto.request.SignInRequestInfo;
-import org.indoles.memberserviceserver.dto.request.SignUpRequestInfo;
-import org.indoles.memberserviceserver.dto.response.SignInInfo;
-import org.indoles.memberserviceserver.entity.enums.Role;
-import org.indoles.memberserviceserver.service.MemberService;
+import org.indoles.memberserviceserver.core.controller.interfaces.Roles;
+import org.indoles.memberserviceserver.core.dto.request.MemberChargePointRequest;
+import org.indoles.memberserviceserver.core.dto.request.SignInRequestInfo;
+import org.indoles.memberserviceserver.core.dto.request.SignUpRequestInfo;
+import org.indoles.memberserviceserver.core.entity.enums.Role;
+import org.indoles.memberserviceserver.core.dto.response.SignInInfo;
+import org.indoles.memberserviceserver.core.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,4 +1,4 @@
-package org.indoles.memberserviceserver.entity.exception;
+package org.indoles.memberserviceserver.core.entity.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

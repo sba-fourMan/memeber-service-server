@@ -1,12 +1,12 @@
-package org.indoles.memberserviceserver.domain;
+package org.indoles.memberserviceserver.core.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.indoles.memberserviceserver.domain.validate.ValidateMember;
-import org.indoles.memberserviceserver.entity.MemberEntity;
-import org.indoles.memberserviceserver.entity.enums.Role;
+import org.indoles.memberserviceserver.core.domain.validate.ValidateMember;
+import org.indoles.memberserviceserver.core.entity.MemberEntity;
+import org.indoles.memberserviceserver.core.entity.enums.Role;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

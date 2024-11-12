@@ -1,7 +1,7 @@
-package org.indoles.memberserviceserver.domain;
+package org.indoles.memberserviceserver.core.domain;
 
 import lombok.Getter;
-import org.indoles.memberserviceserver.domain.validate.ValidatePoint;
+import org.indoles.memberserviceserver.core.domain.validate.ValidatePoint;
 
 @Getter
 public class Point {

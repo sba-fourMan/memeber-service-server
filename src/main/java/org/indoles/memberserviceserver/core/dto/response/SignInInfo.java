@@ -1,11 +1,10 @@
-package org.indoles.memberserviceserver.dto.response;
+package org.indoles.memberserviceserver.core.dto.response;
 
-import org.indoles.memberserviceserver.entity.enums.Role;
-import org.indoles.memberserviceserver.entity.exception.MemberException;
+import org.indoles.memberserviceserver.core.entity.enums.Role;
+import org.indoles.memberserviceserver.core.entity.exception.MemberException;
+import org.indoles.memberserviceserver.core.entity.exception.MemberExceptionCode;
 
 import java.util.Objects;
-
-import static org.indoles.memberserviceserver.entity.exception.MemberExceptionCode.*;
 
 public record SignInInfo(Long id, Role role) {
 
@@ -16,7 +15,7 @@ public record SignInInfo(Long id, Role role) {
 
     private void validateNotNull(Object value, String fieldName) {
         if (Objects.isNull(value)) {
-            throw new MemberException(FIELD_CANNOT_BE_NULL, fieldName);
+            throw new MemberException(MemberExceptionCode.FIELD_CANNOT_BE_NULL, fieldName);
         }
     }
 

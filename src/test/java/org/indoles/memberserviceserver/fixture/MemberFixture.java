@@ -1,8 +1,6 @@
 package org.indoles.memberserviceserver.fixture;
 
-import org.indoles.memberserviceserver.entity.MemberEntity;
-
-import static org.indoles.memberserviceserver.entity.enums.Role.*;
+import org.indoles.memberserviceserver.core.entity.MemberEntity;
 
 public class MemberFixture {
 

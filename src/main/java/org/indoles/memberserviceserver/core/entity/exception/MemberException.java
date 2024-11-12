@@ -1,4 +1,4 @@
-package org.indoles.memberserviceserver.entity.exception;
+package org.indoles.memberserviceserver.core.entity.exception;
 
 import org.indoles.memberserviceserver.common.exception.BusinessException;
 import org.indoles.memberserviceserver.common.exception.ExceptionCode;

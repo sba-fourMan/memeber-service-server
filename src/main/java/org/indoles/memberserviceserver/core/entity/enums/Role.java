@@ -1,10 +1,11 @@
-package org.indoles.memberserviceserver.entity.enums;
+package org.indoles.memberserviceserver.core.entity.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.indoles.memberserviceserver.entity.exception.MemberException;
+import org.indoles.memberserviceserver.core.entity.exception.MemberException;
+import org.indoles.memberserviceserver.core.entity.exception.MemberExceptionCode;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,8 +13,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.indoles.memberserviceserver.entity.exception.MemberExceptionCode.*;
 
 @Getter
 @RequiredArgsConstructor
@@ -34,7 +33,7 @@ public enum Role {
         if (roleMap.containsKey(description)) {
             return roleMap.get(description);
         }
-        throw new MemberException(ROLE_NOT_FOUND, description);
+        throw new MemberException(MemberExceptionCode.ROLE_NOT_FOUND, description);
     }
 
     private static final Map<String, Role> roleMap =
@@ -45,6 +44,6 @@ public enum Role {
         return Arrays.stream(values())
                 .filter(role -> role.name().equals(userRole))
                 .findAny()
-                .orElseThrow(() -> new MemberException(ROLE_NOT_FOUND, userRole));
+                .orElseThrow(() -> new MemberException(MemberExceptionCode.ROLE_NOT_FOUND, userRole));
     }
 }

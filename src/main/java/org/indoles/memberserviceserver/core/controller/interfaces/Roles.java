@@ -1,4 +1,6 @@
-package org.indoles.memberserviceserver.controller.interfaces;
+package org.indoles.memberserviceserver.core.controller.interfaces;
+
+import org.indoles.memberserviceserver.core.entity.enums.Role;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +9,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SellerOnly {
+public @interface Roles {
+
+    Role[] value();
 }

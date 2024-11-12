@@ -1,6 +1,6 @@
-package org.indoles.memberserviceserver.repository;
+package org.indoles.memberserviceserver.core.repository;
 
-import org.indoles.memberserviceserver.entity.MemberEntity;
+import org.indoles.memberserviceserver.core.entity.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

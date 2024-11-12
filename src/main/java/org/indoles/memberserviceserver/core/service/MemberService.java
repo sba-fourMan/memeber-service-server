@@ -1,21 +1,18 @@
-package org.indoles.memberserviceserver.service;
+package org.indoles.memberserviceserver.core.service;
 
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.indoles.memberserviceserver.domain.Member;
-import org.indoles.memberserviceserver.domain.Point;
-import org.indoles.memberserviceserver.dto.request.SignInRequestInfo;
-import org.indoles.memberserviceserver.dto.request.SignUpRequestInfo;
-import org.indoles.memberserviceserver.dto.response.SignInInfo;
-import org.indoles.memberserviceserver.entity.MemberEntity;
-import org.indoles.memberserviceserver.entity.exception.MemberException;
-import org.indoles.memberserviceserver.repository.MemberRepository;
+import org.indoles.memberserviceserver.core.dto.request.SignUpRequestInfo;
+import org.indoles.memberserviceserver.core.entity.MemberEntity;
+import org.indoles.memberserviceserver.core.entity.exception.MemberException;
+import org.indoles.memberserviceserver.core.domain.Member;
+import org.indoles.memberserviceserver.core.domain.Point;
+import org.indoles.memberserviceserver.core.dto.request.SignInRequestInfo;
+import org.indoles.memberserviceserver.core.dto.response.SignInInfo;
+import org.indoles.memberserviceserver.core.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
-import static org.indoles.memberserviceserver.entity.exception.MemberExceptionCode.*;
 
 @Slf4j
 @Service
