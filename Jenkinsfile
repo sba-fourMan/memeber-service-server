@@ -45,12 +45,13 @@ pipeline {
                 }
             }
         }
-    }
 
-    post {
-        always {
-            sh "docker rmi ${ECR_REPO_URL}:${IMAGE_TAG} || true"
-            sh "rm -rf build/libs/*.jar"
+        stage('Docker Image Remove and .jar File') {
+            steps {
+                script {
+                    sh "docker rmi $${ECR_REPO_URL}:${IMAGE_TAG} || true"
+                    sh "rm -rf build/libs/*.jar"
+                }
+            }
         }
     }
-}
