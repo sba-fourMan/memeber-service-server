@@ -20,7 +20,7 @@ public class ValidatePoint {
         amount += price;
     }
 
-    public void validatePositiveAmount(Long amount) {
+    public void validatePositiveAmount(long amount) {
         if (amount < 0) {
             throw new BadRequestException("금액은 양수여야 합니다.", ErrorCode.P008);
         }

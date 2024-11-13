@@ -44,7 +44,7 @@ public class Member {
      * @param amount 지불할 포인트
      */
 
-    public void pointTransfer(Member receiver, Long amount) {
+    public void pointTransfer(Member receiver, long amount) {
         point.minus(amount);
         receiver.getPoint().plus(amount);
     }
