@@ -49,7 +49,7 @@ pipeline {
         stage('Remove Docker Image and .jar File') {
             steps {
                 script {
-                    sh "docker rmi $${ECR_REPO_URL}:${IMAGE_TAG} || true"
+                    sh "docker rmi ${ECR_REPO_URL}:${IMAGE_TAG} || true"
                     sh "rm -rf build/libs/*.jar"
                 }
             }
