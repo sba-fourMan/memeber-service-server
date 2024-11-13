@@ -6,12 +6,6 @@ import org.indoles.memberserviceserver.core.domain.enums.Role;
 
 public class MemberFixture {
 
-    private Long id = 1L;
-    private String signInId = "buyerId";
-    private String password = "password00";
-    private Role role = Role.BUYER;
-    private Point point = new Point(1000L);
-
     private MemberFixture() {
     }
 
