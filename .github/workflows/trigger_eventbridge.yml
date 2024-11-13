@@ -18,7 +18,7 @@ jobs:
         run: |
           aws events put-events --entries '[
             {
-              "Source": "aws.partner/github.com",
+              "Source": "custom.github",
               "DetailType": "GitHub Repository Event",
               "Detail": "{\"eventName\": \"push\", \"branch\": \"dev\"}",
               "EventBusName": "default"
