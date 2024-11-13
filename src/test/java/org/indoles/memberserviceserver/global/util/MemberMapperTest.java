@@ -3,6 +3,7 @@ package org.indoles.memberserviceserver.global.util;
 import org.indoles.memberserviceserver.core.domain.Member;
 import org.indoles.memberserviceserver.core.domain.Point;
 import org.indoles.memberserviceserver.core.entity.MemberEntity;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -12,9 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MemberMapperTest {
     @Nested
-    class MemberMapperEntity_Success {
+    class MemberMapper_Success {
         @Test
-        public void 도메인_엔티티로_변환하면_정보가_동일하다() {
+        @DisplayName("영속성 엔티티를 도메인 엔티티로 변환하면 정보가 동일하다")
+        void transferMemberEntityToMember() {
             // given
             MemberEntity entity = MemberEntity.builder()
                     .id(1L)
@@ -38,7 +40,8 @@ class MemberMapperTest {
         }
 
         @Test
-        void 영속성_엔티티로_변환하면_정보가_동일하다() {
+        @DisplayName("도메인 엔티티를 영속성 엔티티로 변환하면 정보가 동일하다")
+        void transferMemberToMemberEntity() {
             // given
             Member member = Member.builder()
                     .id(1L)
