@@ -20,7 +20,7 @@ public class Point {
         amount -= minusAmount;
     }
 
-    public void plus(Long price) {
+    public void plus(long price) {
         validatePoint.validatePositiveAmount(price);
         validatePoint.validatePlusPoint(amount, price);
         amount += price;
