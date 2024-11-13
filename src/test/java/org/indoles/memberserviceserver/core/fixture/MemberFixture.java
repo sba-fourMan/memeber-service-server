@@ -1,4 +1,4 @@
-package org.indoles.memberserviceserver.fixture;
+package org.indoles.memberserviceserver.core.fixture;
 
 import org.indoles.memberserviceserver.core.entity.MemberEntity;
 

@@ -6,15 +6,15 @@ import org.indoles.memberserviceserver.core.domain.validate.ValidatePoint;
 @Getter
 public class Point {
 
-    private Long amount;
+    private long amount;
     private final ValidatePoint validatePoint = new ValidatePoint();
 
-    public Point(Long amount) {
+    public Point(long amount) {
         validatePoint.validatePositiveAmount(amount);
         this.amount = amount;
     }
 
-    public void minus(Long minusAmount) {
+    public void minus(long minusAmount) {
         validatePoint.validatePositiveAmount(minusAmount);
         validatePoint.validateMinusPoint(amount, minusAmount);
         amount -= minusAmount;
@@ -36,7 +36,7 @@ public class Point {
         }
 
         Point point = (Point) o;
-        return amount != null && amount.equals(point.amount);
+        return getAmount() == point.getAmount();
     }
 
     public Long getValue() {
