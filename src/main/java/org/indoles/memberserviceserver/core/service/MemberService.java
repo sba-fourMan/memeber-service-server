@@ -7,7 +7,7 @@ import org.indoles.memberserviceserver.core.dto.SignUpRequestInfo;
 import org.indoles.memberserviceserver.core.domain.Member;
 import org.indoles.memberserviceserver.core.dto.SignInRequestInfo;
 import org.indoles.memberserviceserver.core.dto.SignInInfo;
-import org.indoles.memberserviceserver.core.repository.MemberRepository;
+import org.indoles.memberserviceserver.core.infra.MemberCoreRepository;
 import org.indoles.memberserviceserver.global.exception.BadRequestException;
 import org.indoles.memberserviceserver.global.exception.ErrorCode;
 import org.indoles.memberserviceserver.global.exception.NotFoundException;
@@ -20,12 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberRepository memberRepository;
+    private final MemberCoreRepository memberCoreRepository;
 
     @Transactional
     public void signUp(SignUpRequestInfo signUpRequestInfo) {
         try {
-            if (memberRepository.isExist(signUpRequestInfo.signUpId())) {
+            if (memberCoreRepository.isExist(signUpRequestInfo.signUpId())) {
                 throw new BadRequestException("이미 존재하는 아이디입니다. input=" + signUpRequestInfo.signUpId(), ErrorCode.M000);
             }
             Member member = Member.createMemberWithRole(
@@ -34,7 +34,7 @@ public class MemberService {
                     signUpRequestInfo.userRole()
             );
 
-            memberRepository.save(member);
+            memberCoreRepository.save(member);
         } catch (Exception e) {
             log.error("회원가입 중 오류 발생", e);
             throw e;
@@ -43,7 +43,7 @@ public class MemberService {
 
     public SignInInfo signIn(SignInRequestInfo signInRequestInfo) {
         try {
-            Member member = memberRepository.findBySignInId(signInRequestInfo.signInId())
+            Member member = memberCoreRepository.findBySignInId(signInRequestInfo.signInId())
                     .orElseThrow(() -> new BadRequestException(
                             "아이디에 해당되는 사용자를 찾을 수 없습니다. signInId=" + signInRequestInfo.signInId(),
                             ErrorCode.M002));
@@ -65,11 +65,11 @@ public class MemberService {
             if (chargePoint <= 0) {
                 throw new BadRequestException("포인트는 0원 이하로 충전할 수 없습니다. 충전 포인트=" + chargePoint, ErrorCode.P005);
             }
-            Member member = memberRepository.findById(memberInfo.id())
+            Member member = memberCoreRepository.findById(memberInfo.id())
                     .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다. 사용자 id=" + memberInfo.id(), ErrorCode.M002));
 
             member.chargePoint(chargePoint);
-            memberRepository.save(member);
+            memberCoreRepository.save(member);
         } catch (Exception e) {
             log.error("포인트 충전 중 오류 발생", e);
             throw e;
@@ -87,8 +87,8 @@ public class MemberService {
             log.debug("  - Member.{}의 잔고: {}, Member.{}의 잔고: {}", sender.getId(), sender.getPoint().getAmount(),
                     recipientId, recipient.getPoint().getAmount());
 
-            memberRepository.save(sender);
-            memberRepository.save(recipient);
+            memberCoreRepository.save(sender);
+            memberCoreRepository.save(recipient);
         } catch (Exception e) {
             log.error("포인트 전송 중 오류 발생", e);
             throw e;
@@ -96,7 +96,7 @@ public class MemberService {
     }
 
     private Member findMemberObject(Long id) {
-        return memberRepository.findById(id)
+        return memberCoreRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다. id=" + id, ErrorCode.M002));
     }
 }
