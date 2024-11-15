@@ -91,17 +91,13 @@ public class JwtTokenProvider {
         String refreshToken = Jwts.builder()
                 .setSubject(userId.toString())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration * 2)) // 만료 시간 두 배
+                .setExpiration(new Date(System.currentTimeMillis() + expiration * 2))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
 
         // Redis에 리프레시 토큰 저장
         redisTemplate.opsForValue().set(refreshToken, userId.toString(), expiration * 2, TimeUnit.MILLISECONDS);
         return refreshToken;
-    }
-
-    public Long getUserIdFromToken(String token) {
-        return Long.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject());
     }
 
     public boolean validateToken(String token) {
@@ -122,5 +118,43 @@ public class JwtTokenProvider {
             log.error("JWT validation error: {}", e.getMessage());
         }
         return false;
+    }
+
+    public Long validateRefreshToken(String refreshToken) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secretKey.getBytes())
+                    .parseClaimsJws(refreshToken)
+                    .getBody();
+
+            Long userId = Long.valueOf(claims.getSubject());
+
+            String storedUserId = redisTemplate.opsForValue().get(refreshToken);
+            if (storedUserId != null && storedUserId.equals(userId.toString())) {
+                return userId;
+            }
+        } catch (Exception e) {
+            log.error("Error validating refresh token: {}", e.getMessage());
+        }
+        return null;
+    }
+
+    public Role getRoleFromToken(String refreshToken) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secretKey.getBytes())
+                    .parseClaimsJws(refreshToken)
+                    .getBody();
+
+            SignInInfo signInInfo = (SignInInfo) claims.get("signInInfo");
+            return signInInfo.role();
+        } catch (Exception e) {
+            log.error("Error extracting role from token: {}", e.getMessage());
+            return null;
+        }
+    }
+
+    public void invalidateRefreshToken(String refreshToken) {
+        redisTemplate.delete(refreshToken);
     }
 }
