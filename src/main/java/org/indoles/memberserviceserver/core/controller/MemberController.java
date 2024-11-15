@@ -2,6 +2,7 @@ package org.indoles.memberserviceserver.core.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.indoles.memberserviceserver.core.domain.enums.Role;
 import org.indoles.memberserviceserver.core.dto.*;
 import org.indoles.memberserviceserver.core.service.MemberService;
 import org.indoles.memberserviceserver.global.util.JwtTokenProvider;
@@ -89,5 +90,34 @@ public class MemberController {
             log.error("Unauthorized: JWT validation failed");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+    /**
+     * Access Token 재발급 API
+     */
+    @PostMapping("/refresh")
+    public ResponseEntity<SignInResponseInfo> refreshAccessToken(@RequestBody RefreshTokenRequest request) {
+        String refreshToken = request.getRefreshToken();
+
+        Long userId = jwtTokenProvider.validateRefreshToken(refreshToken);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Role role = jwtTokenProvider.getRoleFromToken(refreshToken);
+        if (role == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // 새로운 액세스 토큰 생성
+        SignInInfo signInInfo = new SignInInfo(userId, role);
+        String accessToken = jwtTokenProvider.createAccessToken(signInInfo);
+
+        //기존 리프레시 토큰 재갱신
+        jwtTokenProvider.invalidateRefreshToken(refreshToken);
+        String newRefreshToken = jwtTokenProvider.createRefreshToken(userId);
+
+        SignInResponseInfo signInResponseInfo = new SignInResponseInfo(signInInfo.role(), accessToken, newRefreshToken);
+        return ResponseEntity.ok(signInResponseInfo);
     }
 }
