@@ -38,7 +38,7 @@ public class JwtTokenProvider {
     }
 
     /**
-     *
+     * 액세스 토큰 생성
      */
 
     public String createAccessToken(SignInInfo signInInfo) {
