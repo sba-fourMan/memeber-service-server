@@ -38,8 +38,4 @@ public class Point {
         Point point = (Point) o;
         return getAmount() == point.getAmount();
     }
-
-    public Long getValue() {
-        return amount;
-    }
 }
