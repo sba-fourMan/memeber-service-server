@@ -1,10 +1,6 @@
 package org.indoles.memberserviceserver.core.domain.enums;
 
-import org.indoles.memberserviceserver.global.exception.BadRequestException;
-
-import java.util.Arrays;
-
-import static org.indoles.memberserviceserver.global.exception.ErrorCode.M001;
+import org.indoles.memberserviceserver.core.domain.validate.ValidateRole;
 
 public enum Role {
 
@@ -18,10 +14,7 @@ public enum Role {
     }
 
     public static Role find(final String userRole) {
-        return Arrays.stream(values())
-                .filter(role -> role.name().equals(userRole))
-                .findAny()
-                .orElseThrow(() -> new BadRequestException("사용자의 역할을 찾을 수 없습니다. userRole = " + userRole, M001));
+        return ValidateRole.validate(userRole);
     }
 }
 

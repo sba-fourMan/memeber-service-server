@@ -17,14 +17,14 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.indoles.memberserviceserver.core.domain.enums.Role.*;
+import static org.indoles.memberserviceserver.global.exception.ErrorCode.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MemberTest {
 
-
     @Test
     @DisplayName("정상적으로 회원을 생성할 수 있다.")
-    void createMember_Success() {
+    void create_Member_Success() {
         // when
         Member member = Member.builder()
                 .signInId("testId")
@@ -48,7 +48,7 @@ class MemberTest {
         @ParameterizedTest
         @MethodSource("generateInvalidPassword")
         @DisplayName("유효하지 않은 비밀번호면 예외가 발생한다.")
-        void invalidPassword_Then_ThrowException(String expectedMessage, String password, ErrorCode expectedErrorCode) {
+        void invalid_Password_Then_ThrowException(String expectedMessage, String password, ErrorCode expectedErrorCode) {
             // expect
             assertThatThrownBy(() -> Member.builder()
                     .signInId("testId")
@@ -63,12 +63,12 @@ class MemberTest {
 
         private static Stream<Arguments> generateInvalidPassword() {
             return Stream.of(
-                    Arguments.of("비밀번호는 빈칸 또는 공백일 수 없습니다.", "", ErrorCode.M006),
-                    Arguments.of("비밀번호는 8자 이상 20자 이하로 입력해주세요. 현재 길이=3", "p00", ErrorCode.M007),
-                    Arguments.of("비밀번호는 8자 이상 20자 이하로 입력해주세요. 현재 길이=26", "passwordpasswordpassword00", ErrorCode.M007),
-                    Arguments.of("비밀번호는 숫자가 반드시 포함되어야 합니다.", "password", ErrorCode.M008),
-                    Arguments.of("비밀번호는 알파벳 소문자가 반드시 포함되어야 합니다.", "PASSWORD00", ErrorCode.M009),
-                    Arguments.of("비밀번호는 영문자와 숫자만 사용할 수 있습니다.", "password00!", ErrorCode.M010)
+                    Arguments.of("비밀번호는 빈칸 또는 공백일 수 없습니다.", "", M006),
+                    Arguments.of("비밀번호는 8자 이상 20자 이하로 입력해주세요. 현재 길이=3", "p00", M007),
+                    Arguments.of("비밀번호는 8자 이상 20자 이하로 입력해주세요. 현재 길이=26", "passwordpasswordpassword00", M007),
+                    Arguments.of("비밀번호는 숫자가 반드시 포함되어야 합니다.", "password", M008),
+                    Arguments.of("비밀번호는 알파벳 소문자가 반드시 포함되어야 합니다.", "PASSWORD00", M009),
+                    Arguments.of("비밀번호는 영문자와 숫자만 사용할 수 있습니다.", "password00!", M010)
             );
         }
     }
@@ -95,7 +95,7 @@ class MemberTest {
 
     @Test
     @DisplayName("포인트 잔액보다 많은 양을 사용하려하면 예외가 발생한다.")
-    void usePoint_Over_Than_PointAmount_Then_ThrowException() {
+    void usePoint_OverThan_PointAmount_ThrowException() {
         // given
         Member buyer = Member.builder()
                 .signInId("testId")
@@ -110,12 +110,12 @@ class MemberTest {
         assertThatThrownBy(() -> buyer.usePoint(price * quantity))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("포인트가 부족합니다.")
-                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.P001);
+                .hasFieldOrPropertyWithValue("errorCode", P001);
     }
 
     @Test
     @DisplayName("포인트를 충전할 수 있다.")
-    void chargePoint_Success() {
+    void charge_Point_Success() {
         // given
         Member buyer = Member.builder()
                 .signInId("testId")
@@ -136,7 +136,7 @@ class MemberTest {
 
         @Test
         @DisplayName("비밀번호가 맞는 경우 true를 반환한다.")
-        void Password_Is_Correct_Then_Return_True() {
+        void Password_IsCorrect_Return_True() {
             // given
             Member buyer = Member.builder()
                     .signInId("testId")
@@ -151,7 +151,7 @@ class MemberTest {
 
         @Test
         @DisplayName("비밀번호가 틀린 경우 false를 반환한다.")
-        void Password_Is_Incorrect_Then_Return_False() {
+        void Password_IsIncorrect_Return_False() {
             // given
             Member buyer = Member.builder()
                     .signInId("testId")
@@ -170,7 +170,7 @@ class MemberTest {
     class isBuyer_Method {
 
         @Test
-        void Is_Buyer_Then_Return_True() {
+        void IsBuyer_Return_True() {
             // given
             Member buyer = Member.builder()
                     .signInId("testId")
@@ -185,7 +185,7 @@ class MemberTest {
 
         @Test
         @DisplayName("판매자인 경우 false를 반환한다.")
-        void Is_Seller_Then_Return_False() {
+        void IsSeller_Return_False() {
             // given
             Member seller = Member.builder()
                     .signInId("testId")
@@ -201,7 +201,7 @@ class MemberTest {
 
     @Test
     @DisplayName("동일한 회원인지 확인할 수 있다.")
-    void Check_Same_Member_Then_Return_True() {
+    void Check_SameMember_Return_True() {
         // given
         Member member = Member.builder()
                 .signInId("testId")
@@ -220,7 +220,7 @@ class MemberTest {
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "    "})
     @DisplayName("아이디가 빈칸 혹은 공백이라면 예외가 발생한다.")
-    void ID_Should_Not_Be_Empty(String userId) {
+    void ID_ShouldNot_Empty_Fail(String userId) {
         // expect
         assertThatThrownBy(() ->
                 Member.builder()
@@ -230,13 +230,13 @@ class MemberTest {
                         .point(new Point(100))
                         .build())
                 .isInstanceOf(BadRequestException.class)
-                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.M004);
+                .hasFieldOrPropertyWithValue("errorCode", M004);
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"a", "b", "21ccccc21212121212121"})
     @DisplayName("아이디는 20자 이상으로 입력할 경우 예외가 발생한다.")
-    void ID_Should_Be_Within_20_Characters(String userId) {
+    void ID_Should_Oversize_Fail(String userId) {
         // expect
         assertThatThrownBy(() ->
                 Member.builder()
@@ -246,7 +246,7 @@ class MemberTest {
                         .point(new Point(100))
                         .build())
                 .isInstanceOf(BadRequestException.class)
-                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.M005);
+                .hasFieldOrPropertyWithValue("errorCode", M005);
     }
 
     @Nested
@@ -254,7 +254,7 @@ class MemberTest {
 
         @Test
         @DisplayName("포인트를 다른 회원에게 송금할 수 있다.")
-        void Transfer_Point_To_Another_Member() {
+        void Transfer_Point_ToAnother_Member_Success() {
             // given
             Member buyer = MemberFixture.createBuyerWithDefaultPoint();
             Member seller = MemberFixture.createSellerWithDefaultPoint();
@@ -269,15 +269,14 @@ class MemberTest {
 
         @Test
         @DisplayName("포인트가 부족한 경우 예외가 발생한다.")
-        void Point_Is_Not_Enough_Then_Throw_Exception() {
+        void Point_IsNot_Enough_Point_ThrowException() {
             // given
             Member buyer = MemberFixture.createBuyerWithDefaultPoint();
 
             // expect
             assertThatThrownBy(() -> buyer.pointTransfer(buyer, 1234567890))
                     .isInstanceOf(BadRequestException.class)
-                    .hasFieldOrPropertyWithValue("errorCode", ErrorCode.P001);
+                    .hasFieldOrPropertyWithValue("errorCode", P001);
         }
-
     }
 }

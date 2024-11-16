@@ -1,11 +1,11 @@
-package org.indoles.memberserviceserver.core.dto;
+package org.indoles.memberserviceserver.core.dto.request;
 
 import org.indoles.memberserviceserver.global.exception.BadRequestException;
 import org.indoles.memberserviceserver.global.exception.ErrorCode;
 
 import java.util.Objects;
 
-public record SignUpRequestInfo(
+public record SignUpRequest(
         String signUpId,
         String password,
         String userRole
@@ -14,7 +14,7 @@ public record SignUpRequestInfo(
     private static final String ERROR_NULL_VALUE = "%s는 Null일 수 없습니다.";
     private static final String ERROR_ID_IS_BLANK = "아이디는 빈칸 또는 공백일 수 없습니다.";
 
-    public SignUpRequestInfo {
+    public SignUpRequest {
         validateNotNull(signUpId, "회원가입 ID");
         validateNotNull(password, "회원가입 패스워드");
         validateNotNull(userRole, "사용자 역할");

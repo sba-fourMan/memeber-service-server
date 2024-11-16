@@ -3,7 +3,6 @@ package org.indoles.memberserviceserver.core.infra;
 import lombok.RequiredArgsConstructor;
 import org.indoles.memberserviceserver.core.domain.Member;
 import org.indoles.memberserviceserver.core.entity.MemberEntity;
-import org.indoles.memberserviceserver.core.repository.MemberRepository;
 import org.indoles.memberserviceserver.global.util.Mapper;
 import org.springframework.stereotype.Repository;
 

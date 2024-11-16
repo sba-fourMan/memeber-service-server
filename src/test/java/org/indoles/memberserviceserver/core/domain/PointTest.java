@@ -1,13 +1,13 @@
 package org.indoles.memberserviceserver.core.domain;
 
 import org.indoles.memberserviceserver.global.exception.BadRequestException;
-import org.indoles.memberserviceserver.global.exception.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.indoles.memberserviceserver.global.exception.ErrorCode.*;
 
 class PointTest {
 
@@ -29,7 +29,8 @@ class PointTest {
 
         @Test
         @DisplayName("포인트를 최대치만큼 충전하면 예외가 발생된다.")
-        void plus_Point_Maximum() {            // given
+        void plus_Point_Maximum_Fail() {
+            // given
             Point point = new Point(Long.MAX_VALUE);
 
             // expect
@@ -37,12 +38,12 @@ class PointTest {
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("포인트가 최대치를 초과하였습니다.")
                     .satisfies(exception -> assertThat(exception).hasFieldOrPropertyWithValue("errorCode",
-                            ErrorCode.P006));
+                            P006));
         }
 
         @Test
         @DisplayName("음수로 충전하려고 하면 예외가 발생된다.")
-        void plus_Point_Negative() {
+        void plus_Point_Negative_Fail() {
             // given
             Point point = new Point(0);
 
@@ -51,7 +52,7 @@ class PointTest {
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("금액은 양수여야 합니다.")
                     .satisfies(exception -> assertThat(exception).hasFieldOrPropertyWithValue("errorCode",
-                            ErrorCode.P008));
+                            P008));
         }
     }
 
@@ -73,7 +74,7 @@ class PointTest {
 
         @Test
         @DisplayName("포인트 잔액보다 많은 포인트를 사용하려고 하면 예외가 발생된다.")
-        void minux_Point_Over_Fail() {
+        void minus_Point_usingOver_Fail() {
             // given
             Point point = new Point(100);
 
@@ -82,12 +83,12 @@ class PointTest {
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("포인트가 부족합니다.")
                     .satisfies(exception -> assertThat(exception).hasFieldOrPropertyWithValue("errorCode",
-                            ErrorCode.P001));
+                            P001));
         }
 
         @Test
         @DisplayName("음수로 빼려고 하면 예외가 발생된다.")
-        void minus_Point_Negative() {
+        void minus_Point_Negative_Fail() {
             // given
             Point point = new Point(1000);
 
@@ -96,17 +97,18 @@ class PointTest {
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("금액은 양수여야 합니다.")
                     .satisfies(exception -> assertThat(exception).hasFieldOrPropertyWithValue("errorCode",
-                            ErrorCode.P008));
+                            P008));
         }
     }
 
     @Test
     @DisplayName("포인트 생성 시 음수일 경우 예외가 발생한다.")
-    void create_Point_Negative() {
+    void create_Point_Negative_Fail() {
+
         // expect
         assertThatThrownBy(() -> new Point(-1))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("금액은 양수여야 합니다.")
-                .satisfies(exception -> assertThat(exception).hasFieldOrPropertyWithValue("errorCode", ErrorCode.P008));
+                .satisfies(exception -> assertThat(exception).hasFieldOrPropertyWithValue("errorCode", P008));
     }
 }
