@@ -14,7 +14,7 @@ class MemberMapperTest {
 
     @Test
     @DisplayName("엔티티를 도메인으로 변환하면 정보가 동일하다")
-    void transferMemberEntityToMember() {
+    void transfer_MemberEntity_ToMember() {
         // given
         MemberEntity entity = MemberEntity.builder()
                 .id(1L)
@@ -39,7 +39,7 @@ class MemberMapperTest {
 
     @Test
     @DisplayName("도메인을 엔티티로 변환하면 정보가 동일하다")
-    void transferMemberToMemberEntity() {
+    void transfer_Member_ToMemberEntity() {
         // given
         Member member = Member.builder()
                 .id(1L)
