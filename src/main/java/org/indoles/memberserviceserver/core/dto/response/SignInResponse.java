@@ -1,8 +1,8 @@
-package org.indoles.memberserviceserver.core.dto;
+package org.indoles.memberserviceserver.core.dto.response;
 
 import org.indoles.memberserviceserver.core.domain.enums.Role;
 
-public record SignInResponseInfo(
+public record SignInResponse(
         Role role,
         String accessToken,
         String refreshToken

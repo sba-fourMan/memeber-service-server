@@ -1,18 +1,18 @@
-package org.indoles.memberserviceserver.core.dto;
+package org.indoles.memberserviceserver.core.dto.request;
 
 import org.indoles.memberserviceserver.global.exception.BadRequestException;
 import org.indoles.memberserviceserver.global.exception.ErrorCode;
 
 import java.util.Objects;
 
-public record SignInRequestInfo(
+public record SignInRequest(
         String signInId,
         String password
 ) {
 
     private static final String ERROR_NULL_VALUE = "%s는 Null일 수 없습니다.";
 
-    public SignInRequestInfo {
+    public SignInRequest {
         validateNotNull(signInId, "로그인 ID");
         validateNotNull(password, "로그인 패스워드");
     }
