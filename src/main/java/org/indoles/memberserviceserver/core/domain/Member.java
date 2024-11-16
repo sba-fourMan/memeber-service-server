@@ -50,6 +50,17 @@ public class Member {
     }
 
     /**
+     * 포인트 환불
+     * @param receiver 포인트를 받을 사용자
+     * @param amount 환불할 포인트
+     */
+
+    public void refundPoint(Member receiver, long amount) {
+        this.point.minus(amount);
+        receiver.getPoint().plus(point.getAmount());
+    }
+
+    /**
      * 포인트 사용(결제)
      **/
 
