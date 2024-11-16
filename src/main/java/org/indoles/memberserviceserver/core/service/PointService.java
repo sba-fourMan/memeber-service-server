@@ -40,15 +40,15 @@ public class PointService {
     }
 
     @Transactional
-    public void pointTransfer(long senderId, long recipientId, long amount) {
+    public void pointTransfer(long senderId, long receiverId, long amount) {
         try {
             Member sender = findMemberObject(senderId);
-            Member recipient = findMemberObject(recipientId);
+            Member recipient = findMemberObject(receiverId);
 
             sender.pointTransfer(recipient, amount);
-            log.debug("  - Member.{}의 포인트 {}원을 Member.{} 에게 전달합니다.", sender.getId(), amount, recipientId);
+            log.debug("  - Member.{}의 포인트 {}원을 Member.{} 에게 전달합니다.", sender.getId(), amount, receiverId);
             log.debug("  - Member.{}의 잔고: {}, Member.{}의 잔고: {}", sender.getId(), sender.getPoint().getAmount(),
-                    recipientId, recipient.getPoint().getAmount());
+                    receiverId, recipient.getPoint().getAmount());
 
             memberCoreRepository.save(sender);
             memberCoreRepository.save(recipient);
@@ -64,15 +64,15 @@ public class PointService {
     }
 
     @Transactional
-    public void refundPoint(long senderId, long recipientId, long amount) {
+    public void refundPoint(long senderId, long receiverId, long amount) {
         try {
             Member sender = findMemberObject(senderId);
-            Member recipient = findMemberObject(recipientId);
+            Member recipient = findMemberObject(receiverId);
 
             sender.refundPoint(recipient, amount);
-            log.debug("  - Member.{}의 포인트 {}원을 Member.{} 에게 환불합니다.", sender.getId(), amount, recipientId);
+            log.debug("  - Member.{}의 포인트 {}원을 Member.{} 에게 환불합니다.", sender.getId(), amount, receiverId);
             log.debug("  - Member.{}의 잔고: {}, Member.{}의 잔고: {}", sender.getId(), sender.getPoint().getAmount(),
-                    recipientId, recipient.getPoint().getAmount());
+                    receiverId, recipient.getPoint().getAmount());
 
             memberCoreRepository.save(sender);
             memberCoreRepository.save(recipient);
@@ -80,5 +80,10 @@ public class PointService {
             log.error("포인트 환불 중 오류 발생", e);
             throw e;
         }
+    }
+
+    public Long getRemainingPoints(Long memberId) {
+        Member member = findMemberObject(memberId);
+        return member.getPoint().getAmount();
     }
 }

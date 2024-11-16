@@ -3,9 +3,9 @@ package org.indoles.memberserviceserver.core.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.indoles.memberserviceserver.core.dto.SignUpRequestInfo;
+import org.indoles.memberserviceserver.core.dto.request.SignUpRequest;
 import org.indoles.memberserviceserver.core.domain.Member;
-import org.indoles.memberserviceserver.core.dto.SignInRequestInfo;
+import org.indoles.memberserviceserver.core.dto.request.SignInRequest;
 import org.indoles.memberserviceserver.core.dto.SignInInfo;
 import org.indoles.memberserviceserver.core.infra.MemberCoreRepository;
 import org.indoles.memberserviceserver.global.exception.BadRequestException;
@@ -23,15 +23,15 @@ public class MemberService {
     private final MemberCoreRepository memberCoreRepository;
 
     @Transactional
-    public void signUp(SignUpRequestInfo signUpRequestInfo) {
+    public void signUp(SignUpRequest signUpRequest) {
         try {
-            if (memberCoreRepository.isExist(signUpRequestInfo.signUpId())) {
-                throw new BadRequestException("이미 존재하는 아이디입니다. input=" + signUpRequestInfo.signUpId(), M000);
+            if (memberCoreRepository.isExist(signUpRequest.signUpId())) {
+                throw new BadRequestException("이미 존재하는 아이디입니다. input=" + signUpRequest.signUpId(), M000);
             }
             Member member = Member.createMemberWithRole(
-                    signUpRequestInfo.signUpId(),
-                    signUpRequestInfo.password(),
-                    signUpRequestInfo.userRole()
+                    signUpRequest.signUpId(),
+                    signUpRequest.password(),
+                    signUpRequest.userRole()
             );
 
             memberCoreRepository.save(member);
@@ -41,14 +41,14 @@ public class MemberService {
         }
     }
 
-    public SignInInfo signIn(SignInRequestInfo signInRequestInfo) {
+    public SignInInfo signIn(SignInRequest signInRequest) {
         try {
-            Member member = memberCoreRepository.findBySignInId(signInRequestInfo.signInId())
+            Member member = memberCoreRepository.findBySignInId(signInRequest.signInId())
                     .orElseThrow(() -> new BadRequestException(
-                            "아이디에 해당되는 사용자를 찾을 수 없습니다. signInId=" + signInRequestInfo.signInId(),
+                            "아이디에 해당되는 사용자를 찾을 수 없습니다. signInId=" + signInRequest.signInId(),
                             M002));
 
-            if (!member.confirmPassword(signInRequestInfo.password())) {
+            if (!member.confirmPassword(signInRequest.password())) {
                 throw new BadRequestException("패스워드가 일치하지 않습니다.", M003);
             }
 
