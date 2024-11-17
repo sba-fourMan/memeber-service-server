@@ -3,7 +3,7 @@ package org.indoles.memberserviceserver.core.service;
 import org.indoles.memberserviceserver.core.context.ServiceTest;
 import org.indoles.memberserviceserver.core.domain.Member;
 import org.indoles.memberserviceserver.core.domain.enums.Role;
-import org.indoles.memberserviceserver.core.dto.SignInInfo;
+import org.indoles.memberserviceserver.core.dto.response.SignInfoRequest;
 import org.indoles.memberserviceserver.core.fixture.MemberFixture;
 import org.indoles.memberserviceserver.global.exception.BadRequestException;
 import org.indoles.memberserviceserver.global.exception.NotFoundException;
@@ -34,7 +34,7 @@ public class PointServiceTest extends ServiceTest {
             Long point = 1000L;
 
             // when
-            pointService.chargePoint(new SignInInfo(id, role), point);
+            pointService.chargePoint(new SignInfoRequest(id, role), point);
 
             // then
             assertThat(memberCoreRepository.findById(id).get().getPoint().getAmount()).isEqualTo(2000L);
@@ -48,7 +48,7 @@ public class PointServiceTest extends ServiceTest {
             Long point = 1000L;
 
             // expect
-            assertThatThrownBy(() -> pointService.chargePoint(new SignInInfo(id, Role.BUYER), point))
+            assertThatThrownBy(() -> pointService.chargePoint(new SignInfoRequest(id, Role.BUYER), point))
                     .isInstanceOf(NotFoundException.class);
         }
 
@@ -67,7 +67,7 @@ public class PointServiceTest extends ServiceTest {
 
 
             // expect
-            assertThatThrownBy(() -> pointService.chargePoint(new SignInInfo(id, role), point))
+            assertThatThrownBy(() -> pointService.chargePoint(new SignInfoRequest(id, role), point))
                     .isInstanceOf(BadRequestException.class);
         }
     }

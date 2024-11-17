@@ -3,9 +3,9 @@ package org.indoles.memberserviceserver.core.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.indoles.memberserviceserver.core.domain.enums.Role;
-import org.indoles.memberserviceserver.core.dto.*;
 import org.indoles.memberserviceserver.core.dto.request.*;
 import org.indoles.memberserviceserver.core.dto.response.RefundResponse;
+import org.indoles.memberserviceserver.core.dto.response.SignInfoRequest;
 import org.indoles.memberserviceserver.core.dto.response.SignInResponse;
 import org.indoles.memberserviceserver.core.dto.response.TransferPointResponse;
 import org.indoles.memberserviceserver.core.service.MemberService;
@@ -45,11 +45,11 @@ public class MemberController {
 
     @PostMapping("/signin")
     public ResponseEntity<SignInResponse> signin(@RequestBody SignInRequest request) {
-        SignInInfo signInInfo = memberService.signIn(request);
-        String accessToken = jwtTokenProvider.createAccessToken(signInInfo);
-        String refreshToken = jwtTokenProvider.createRefreshToken(signInInfo.id());
+        SignInfoRequest signInfoRequest = memberService.signIn(request);
+        String accessToken = jwtTokenProvider.createAccessToken(signInfoRequest);
+        String refreshToken = jwtTokenProvider.createRefreshToken(signInfoRequest.id());
 
-        SignInResponse signInResponse = new SignInResponse(signInInfo.role(), accessToken, refreshToken);
+        SignInResponse signInResponse = new SignInResponse(signInfoRequest.role(), accessToken, refreshToken);
         return ResponseEntity.ok(signInResponse);
     }
 
@@ -87,7 +87,7 @@ public class MemberController {
 
         if (jwtTokenProvider.validateToken(token)) {
             try {
-                SignInInfo memberInfo = jwtTokenProvider.getSignInInfoFromToken(token);
+                SignInfoRequest memberInfo = jwtTokenProvider.getSignInInfoFromToken(token);
                 pointService.chargePoint(memberInfo, memberChargePointRequest.amount());
                 return ResponseEntity.ok().build();
             } catch (Exception e) {
@@ -118,19 +118,19 @@ public class MemberController {
         }
 
         // 새로운 액세스 토큰 생성
-        SignInInfo signInInfo = new SignInInfo(userId, role);
-        String accessToken = jwtTokenProvider.createAccessToken(signInInfo);
+        SignInfoRequest signInfoRequest = new SignInfoRequest(userId, role);
+        String accessToken = jwtTokenProvider.createAccessToken(signInfoRequest);
 
         //기존 리프레시 토큰 재갱신
         jwtTokenProvider.invalidateRefreshToken(refreshToken);
         String newRefreshToken = jwtTokenProvider.createRefreshToken(userId);
 
-        SignInResponse signInResponse = new SignInResponse(signInInfo.role(), accessToken, newRefreshToken);
+        SignInResponse signInResponse = new SignInResponse(signInfoRequest.role(), accessToken, newRefreshToken);
         return ResponseEntity.ok(signInResponse);
     }
 
     /**
-     * 경매 서버, 거래 내역 서버 호출 - 입찰 시 포인트 전송을 위한 API
+     * 경매 서버 - 입찰 시 포인트 전송을 위한 API
      */
     @PostMapping("/points/transfer")
     public ResponseEntity<TransferPointResponse> transferPoint(@RequestHeader("Authorization") String authorizationHeader,
@@ -140,7 +140,7 @@ public class MemberController {
 
         if (jwtTokenProvider.validateToken(token)) {
             try {
-                SignInInfo memberInfo = jwtTokenProvider.getSignInInfoFromToken(token);
+                SignInfoRequest memberInfo = jwtTokenProvider.getSignInInfoFromToken(token);
                 pointService.pointTransfer(memberInfo.id(), transferPointRequest.receiverId(), transferPointRequest.amount());
 
                 Long remainingPoints = pointService.getRemainingPoints(memberInfo.id());
@@ -157,7 +157,7 @@ public class MemberController {
     }
 
     /**
-     * 경매 서버,거래 내역 서버 호출 - 환불 시 포인트 환불을 위한 API
+     * 경매 서버 - 환불 시 포인트 환불을 위한 API
      */
     @PostMapping("/points/refund")
     public ResponseEntity<RefundResponse> refundPoint(@RequestHeader("Authorization") String authorizationHeader,
@@ -167,7 +167,7 @@ public class MemberController {
 
         if (jwtTokenProvider.validateToken(token)) {
             try {
-                SignInInfo memberInfo = jwtTokenProvider.getSignInInfoFromToken(token);
+                SignInfoRequest memberInfo = jwtTokenProvider.getSignInInfoFromToken(token);
                 pointService.refundPoint(memberInfo.id(), refundRequest.receiverId(), refundRequest.amount());
 
                 Long remainingPoints = pointService.getRemainingPoints(memberInfo.id());

@@ -4,7 +4,7 @@ import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.indoles.memberserviceserver.core.domain.enums.Role;
-import org.indoles.memberserviceserver.core.dto.SignInInfo;
+import org.indoles.memberserviceserver.core.dto.response.SignInfoRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -41,9 +41,9 @@ public class JwtTokenProvider {
      * 액세스 토큰 생성
      */
 
-    public String createAccessToken(SignInInfo signInInfo) {
-        Claims claims = Jwts.claims().setSubject(signInInfo.id().toString());
-        claims.put("role", signInInfo.role().name());
+    public String createAccessToken(SignInfoRequest signInfoRequest) {
+        Claims claims = Jwts.claims().setSubject(signInfoRequest.id().toString());
+        claims.put("role", signInfoRequest.role().name());
         Date now = new Date();
 
         String token = Jwts.builder()
@@ -61,14 +61,14 @@ public class JwtTokenProvider {
      * 토큰에서 SignInInfo 추출
      */
 
-    public SignInInfo getSignInInfoFromToken(String token) {
+    public SignInfoRequest getSignInInfoFromToken(String token) {
         try {
             Claims claims = Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token).getBody();
             Long userId = Long.valueOf(claims.getSubject());
             String roleStr = claims.get("role", String.class);
             Role role = Role.valueOf(roleStr);
             log.debug("Extracted userId: {}, role: {}", userId, roleStr);
-            return new SignInInfo(userId, role);
+            return new SignInfoRequest(userId, role);
         } catch (Exception e) {
             log.error("Error extracting SignInInfo from token: {}", e.getMessage());
             throw e;
@@ -146,8 +146,8 @@ public class JwtTokenProvider {
                     .parseClaimsJws(refreshToken)
                     .getBody();
 
-            SignInInfo signInInfo = (SignInInfo) claims.get("signInInfo");
-            return signInInfo.role();
+            SignInfoRequest signInfoRequest = (SignInfoRequest) claims.get("signInInfo");
+            return signInfoRequest.role();
         } catch (Exception e) {
             log.error("Error extracting role from token: {}", e.getMessage());
             return null;

@@ -3,7 +3,7 @@ package org.indoles.memberserviceserver.core.service;
 import org.indoles.memberserviceserver.core.context.ServiceTest;
 import org.indoles.memberserviceserver.core.domain.Member;
 import org.indoles.memberserviceserver.core.domain.enums.Role;
-import org.indoles.memberserviceserver.core.dto.SignInInfo;
+import org.indoles.memberserviceserver.core.dto.response.SignInfoRequest;
 import org.indoles.memberserviceserver.core.dto.request.SignInRequest;
 import org.indoles.memberserviceserver.core.dto.request.SignUpRequest;
 import org.indoles.memberserviceserver.global.exception.BadRequestException;
@@ -62,12 +62,12 @@ public class MemberServiceTest extends ServiceTest {
             SignInRequest signInRequest = new SignInRequest("testId", "securePassword00");
 
             // when
-            SignInInfo signInInfo = memberService.signIn(signInRequest);
+            SignInfoRequest signInfoRequest = memberService.signIn(signInRequest);
 
             // then
-            assertThat(signInInfo).isNotNull();
-            assertThat(signInInfo.id()).isNotNull();
-            assertThat(signInInfo.role()).isEqualTo(Role.BUYER);
+            assertThat(signInfoRequest).isNotNull();
+            assertThat(signInfoRequest.id()).isNotNull();
+            assertThat(signInfoRequest.role()).isEqualTo(Role.BUYER);
         }
 
         @Test

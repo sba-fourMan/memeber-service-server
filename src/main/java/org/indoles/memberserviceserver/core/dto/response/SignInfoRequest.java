@@ -1,4 +1,4 @@
-package org.indoles.memberserviceserver.core.dto;
+package org.indoles.memberserviceserver.core.dto.response;
 
 import org.indoles.memberserviceserver.core.domain.enums.Role;
 import org.indoles.memberserviceserver.global.exception.BadRequestException;
@@ -6,10 +6,10 @@ import org.indoles.memberserviceserver.global.exception.ErrorCode;
 
 import java.util.Objects;
 
-public record SignInInfo(Long id, Role role) {
+public record SignInfoRequest(Long id, Role role) {
     private static final String ERROR_NULL_VALUE = "%s는 Null일 수 없습니다.";
 
-    public SignInInfo {
+    public SignInfoRequest {
         validateNotNull(id, "로그인한 사용자의 식별자");
         validateNotNull(role, "로그인한 사용자의 역할");
     }

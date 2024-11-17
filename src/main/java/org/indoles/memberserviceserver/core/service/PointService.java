@@ -4,7 +4,7 @@ package org.indoles.memberserviceserver.core.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.indoles.memberserviceserver.core.domain.Member;
-import org.indoles.memberserviceserver.core.dto.SignInInfo;
+import org.indoles.memberserviceserver.core.dto.response.SignInfoRequest;
 import org.indoles.memberserviceserver.core.infra.MemberCoreRepository;
 import org.indoles.memberserviceserver.global.exception.BadRequestException;
 import org.indoles.memberserviceserver.global.exception.NotFoundException;
@@ -23,7 +23,7 @@ public class PointService {
     private final MemberCoreRepository memberCoreRepository;
 
     @Transactional
-    public void chargePoint(SignInInfo memberInfo, long chargePoint) {
+    public void chargePoint(SignInfoRequest memberInfo, long chargePoint) {
         try {
             if (chargePoint <= 0) {
                 throw new BadRequestException("포인트는 0원 이하로 충전할 수 없습니다. 충전 포인트=" + chargePoint, P005);
