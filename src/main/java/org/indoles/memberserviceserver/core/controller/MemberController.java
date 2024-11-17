@@ -3,7 +3,6 @@ package org.indoles.memberserviceserver.core.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.indoles.memberserviceserver.core.controller.interfaces.Login;
-import org.indoles.memberserviceserver.core.domain.enums.Role;
 import org.indoles.memberserviceserver.core.dto.request.*;
 import org.indoles.memberserviceserver.core.dto.response.RefundResponse;
 import org.indoles.memberserviceserver.core.dto.response.SignInfoRequest;
@@ -12,7 +11,6 @@ import org.indoles.memberserviceserver.core.dto.response.TransferPointResponse;
 import org.indoles.memberserviceserver.core.service.MemberService;
 import org.indoles.memberserviceserver.core.service.PointService;
 import org.indoles.memberserviceserver.global.util.JwtTokenProvider;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -81,41 +79,6 @@ public class MemberController {
         pointService.chargePoint(signInfoRequest, memberChargePointRequest.amount());
 
         return ResponseEntity.ok().build();
-    }
-
-    /**
-     * Access Token 재발급 API
-     */
-    @PostMapping("/refresh")
-    public ResponseEntity<SignInResponse> refreshAccessToken(
-            @Login SignInfoRequest signInfoRequest,
-            @RequestBody RefreshTokenRequest request
-    ) {
-        String refreshToken = request.refreshToken();
-
-        log.info("Received refresh token: {}", refreshToken);
-
-        if (refreshToken == null || refreshToken.isEmpty()) {
-            return ResponseEntity.badRequest().body(null);
-        }
-
-        Long userId = jwtTokenProvider.validateRefreshToken(refreshToken);
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Role role = jwtTokenProvider.getRoleFromToken(refreshToken);
-        if (role == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        String accessToken = jwtTokenProvider.createAccessToken(signInfoRequest);
-
-        jwtTokenProvider.invalidateRefreshToken(refreshToken);
-        String newRefreshToken = jwtTokenProvider.createRefreshToken(userId, role);
-
-        SignInResponse signInResponse = new SignInResponse(signInfoRequest.role(), accessToken, newRefreshToken);
-        return ResponseEntity.ok(signInResponse);
     }
 
     /**
