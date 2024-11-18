@@ -1,4 +1,4 @@
-package org.indoles.memberserviceserver.core.dto.response;
+package org.indoles.memberserviceserver.core.dto.request;
 
 import org.indoles.memberserviceserver.core.domain.enums.Role;
 import org.indoles.memberserviceserver.global.exception.BadRequestException;

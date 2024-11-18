@@ -1,7 +1,7 @@
 package org.indoles.memberserviceserver.global.util;
 
 import org.indoles.memberserviceserver.core.controller.interfaces.Login;
-import org.indoles.memberserviceserver.core.dto.response.SignInfoRequest;
+import org.indoles.memberserviceserver.core.dto.request.SignInfoRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
