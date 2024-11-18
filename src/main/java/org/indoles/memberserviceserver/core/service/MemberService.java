@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.indoles.memberserviceserver.core.dto.request.SignUpRequest;
 import org.indoles.memberserviceserver.core.domain.Member;
 import org.indoles.memberserviceserver.core.dto.request.SignInRequest;
-import org.indoles.memberserviceserver.core.dto.response.SignInfoRequest;
+import org.indoles.memberserviceserver.core.dto.request.SignInfoRequest;
 import org.indoles.memberserviceserver.core.infra.MemberCoreRepository;
 import org.indoles.memberserviceserver.global.exception.BadRequestException;
 import org.springframework.stereotype.Service;

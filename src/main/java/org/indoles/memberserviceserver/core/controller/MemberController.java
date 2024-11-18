@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.indoles.memberserviceserver.core.controller.interfaces.Login;
 import org.indoles.memberserviceserver.core.dto.request.*;
 import org.indoles.memberserviceserver.core.dto.response.RefundResponse;
-import org.indoles.memberserviceserver.core.dto.response.SignInfoRequest;
+import org.indoles.memberserviceserver.core.dto.request.SignInfoRequest;
 import org.indoles.memberserviceserver.core.dto.response.SignInResponse;
 import org.indoles.memberserviceserver.core.dto.response.TransferPointResponse;
 import org.indoles.memberserviceserver.core.service.MemberService;
