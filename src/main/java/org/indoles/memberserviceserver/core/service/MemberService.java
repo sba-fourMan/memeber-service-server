@@ -6,9 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.indoles.memberserviceserver.core.dto.request.SignUpRequest;
 import org.indoles.memberserviceserver.core.domain.Member;
 import org.indoles.memberserviceserver.core.dto.request.SignInRequest;
+import org.indoles.memberserviceserver.core.dto.response.SignInResponse;
 import org.indoles.memberserviceserver.core.dto.response.SignInfoRequest;
 import org.indoles.memberserviceserver.core.infra.MemberCoreRepository;
 import org.indoles.memberserviceserver.global.exception.BadRequestException;
+import org.indoles.memberserviceserver.global.util.JwtTokenProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ import static org.indoles.memberserviceserver.global.exception.ErrorCode.*;
 public class MemberService {
 
     private final MemberCoreRepository memberCoreRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public void signUp(SignUpRequest signUpRequest) {
@@ -41,7 +44,7 @@ public class MemberService {
         }
     }
 
-    public SignInfoRequest signIn(SignInRequest signInRequest) {
+    public SignInResponse signIn(SignInRequest signInRequest) {
         try {
             Member member = memberCoreRepository.findBySignInId(signInRequest.signInId())
                     .orElseThrow(() -> new BadRequestException(
@@ -52,7 +55,11 @@ public class MemberService {
                 throw new BadRequestException("패스워드가 일치하지 않습니다.", M003);
             }
 
-            return new SignInfoRequest(member.getId(), member.getRole());
+            SignInfoRequest signInfoRequest = new SignInfoRequest(member.getId(), member.getRole());
+            String accessToken = jwtTokenProvider.createAccessToken(signInfoRequest);
+            String refreshToken = jwtTokenProvider.createRefreshToken(signInfoRequest.id(), signInfoRequest.role());
+
+            return new SignInResponse(signInfoRequest.role(), accessToken, refreshToken);
         } catch (Exception e) {
             log.error("로그인 중 오류 발생", e);
             throw e;
