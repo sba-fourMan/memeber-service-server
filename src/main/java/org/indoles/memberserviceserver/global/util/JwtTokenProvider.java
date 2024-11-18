@@ -14,10 +14,6 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 액세스 토큰과 리프레시 생성하고, 리프레시 토큰을 redis에 저장하는 클래스
- */
-
 @Slf4j
 @Component
 public class JwtTokenProvider {
@@ -103,7 +99,6 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
                 .compact();
 
-        // Redis에 리프레시 토큰 저장
         redisTemplate.opsForValue().set(refreshToken, userId.toString(), expiration * 2, TimeUnit.MILLISECONDS);
         return refreshToken;
     }
@@ -113,65 +108,9 @@ public class JwtTokenProvider {
         try {
             Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token);
             return true;
-        } catch (SignatureException e) {
-            log.error("JWT signature verification failed: {}", e.getMessage());
-        } catch (ExpiredJwtException e) {
-            log.error("JWT token is expired: {}", e.getMessage());
-        } catch (MalformedJwtException e) {
-            log.error("JWT token is malformed: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            log.error("JWT token is unsupported: {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            log.error("JWT token is empty: {}", e.getMessage());
         } catch (Exception e) {
             log.error("JWT validation error: {}", e.getMessage());
         }
         return false;
-    }
-
-    public Long validateRefreshToken(String refreshToken) {
-        try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secretKey.getBytes())
-                    .parseClaimsJws(refreshToken)
-                    .getBody();
-
-            Long userId = Long.valueOf(claims.getSubject());
-
-            String storedUserId = redisTemplate.opsForValue().get(refreshToken);
-            if (storedUserId != null && storedUserId.equals(userId.toString())) {
-                return userId;
-            }
-        } catch (Exception e) {
-            log.error("Error validating refresh token: {}", e.getMessage());
-        }
-        return null;
-    }
-
-    public Role getRoleFromToken(String refreshToken) {
-        try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secretKey.getBytes())
-                    .parseClaimsJws(refreshToken)
-                    .getBody();
-
-            String signInfoJson = claims.get("signInInfo", String.class);
-            if (signInfoJson != null) {
-                ObjectMapper objectMapper = new ObjectMapper();
-                SignInfoRequest signInfoRequest = objectMapper.readValue(signInfoJson, SignInfoRequest.class);
-                return signInfoRequest.role();
-            } else {
-                log.error("signInInfo is null in token");
-                return null;
-            }
-        } catch (Exception e) {
-            log.error("Error extracting role from token: {}", e.getMessage());
-            return null;
-        }
-    }
-
-
-    public void invalidateRefreshToken(String refreshToken) {
-        redisTemplate.delete(refreshToken);
     }
 }

@@ -1,11 +1,7 @@
 package org.indoles.memberserviceserver.core.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.indoles.memberserviceserver.core.controller.interfaces.Login;
-import org.indoles.memberserviceserver.core.controller.interfaces.PublicAccess;
-import org.indoles.memberserviceserver.core.controller.interfaces.Roles;
-import org.indoles.memberserviceserver.core.domain.enums.Role;
 import org.indoles.memberserviceserver.core.dto.request.*;
 import org.indoles.memberserviceserver.core.dto.response.RefundResponse;
 import org.indoles.memberserviceserver.core.dto.request.SignInfoRequest;
@@ -17,7 +13,6 @@ import org.indoles.memberserviceserver.global.util.JwtTokenProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor
@@ -31,13 +26,11 @@ public class MemberController {
      * 회원가입 API
      */
 
-    @PublicAccess
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(
             @RequestBody SignUpRequest request
     ) {
         memberService.signUp(request);
-
         return ResponseEntity.ok()
                 .build();
     }
@@ -46,16 +39,11 @@ public class MemberController {
      * 로그인 API
      */
 
-    @PublicAccess
     @PostMapping("/signin")
     public ResponseEntity<SignInResponse> signin(
             @RequestBody SignInRequest request
     ) {
-        SignInfoRequest signInfoRequest = memberService.signIn(request);
-        String accessToken = jwtTokenProvider.createAccessToken(signInfoRequest);
-        String refreshToken = jwtTokenProvider.createRefreshToken(signInfoRequest.id(), signInfoRequest.role());
-
-        SignInResponse signInResponse = new SignInResponse(signInfoRequest.role(), accessToken, refreshToken);
+        SignInResponse signInResponse = memberService.signIn(request);
         return ResponseEntity.ok(signInResponse);
     }
 
@@ -63,34 +51,28 @@ public class MemberController {
      * 로그아웃 API
      */
 
-    @Roles({Role.BUYER, Role.SELLER})
     @PostMapping("/signout")
     public ResponseEntity<Void> signOut(
             @Login SignInfoRequest signInfoRequest
     ) {
-
-        log.info("User signed out: {}", signInfoRequest);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 포인트 충전 API
      */
-    @Roles({Role.BUYER, Role.SELLER})
     @PostMapping("/points/charge")
     public ResponseEntity<Void> chargePoint(
             @Login SignInfoRequest signInfoRequest,
             @RequestBody MemberChargePointRequest memberChargePointRequest
     ) {
         pointService.chargePoint(signInfoRequest, memberChargePointRequest.amount());
-
         return ResponseEntity.ok().build();
     }
 
     /**
      * 경매 서버 - 입찰 시 포인트 전송을 위한 API
      */
-    @Roles({Role.BUYER, Role.SELLER})
     @PostMapping("/points/transfer")
     public ResponseEntity<TransferPointResponse> transferPoint(
             @Login SignInfoRequest signInfoRequest,
@@ -105,7 +87,6 @@ public class MemberController {
     /**
      * 경매 서버 - 환불 시 포인트 환불을 위한 API
      */
-    @Roles({Role.BUYER, Role.SELLER})
     @PostMapping("/points/refund")
     public ResponseEntity<RefundResponse> refundPoint(
             @Login SignInfoRequest signInfoRequest,
