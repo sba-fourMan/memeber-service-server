@@ -6,6 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.indoles.memberserviceserver.core.dto.request.SignInfoRequest;
 import org.indoles.memberserviceserver.global.util.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,15 +36,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = extractToken(request);
         if (token != null && jwtTokenProvider.validateToken(token)) {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secretKey.getBytes())
-                    .parseClaimsJws(token)
-                    .getBody();
 
-            String userId = claims.getSubject();
+            SignInfoRequest signInfoRequest = jwtTokenProvider.getSignInInfoFromToken(token);
 
             UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(userId, null, new ArrayList<>());
+                    new UsernamePasswordAuthenticationToken(signInfoRequest, null, new ArrayList<>());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 

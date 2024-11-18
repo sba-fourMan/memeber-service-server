@@ -1,4 +1,4 @@
-package org.indoles.memberserviceserver.global.util;
+package org.indoles.memberserviceserver.global.config;
 
 import lombok.Getter;
 import org.indoles.memberserviceserver.core.dto.request.SignInfoRequest;
@@ -16,3 +16,4 @@ public class AuthenticationContext {
         this.principal = principal;
     }
 }
+
