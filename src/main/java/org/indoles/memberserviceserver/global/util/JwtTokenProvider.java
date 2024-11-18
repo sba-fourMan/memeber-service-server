@@ -1,10 +1,12 @@
 package org.indoles.memberserviceserver.global.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.indoles.memberserviceserver.core.domain.enums.Role;
-import org.indoles.memberserviceserver.core.dto.SignInInfo;
+import org.indoles.memberserviceserver.core.dto.response.SignInfoRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -41,9 +43,9 @@ public class JwtTokenProvider {
      * 액세스 토큰 생성
      */
 
-    public String createAccessToken(SignInInfo signInInfo) {
-        Claims claims = Jwts.claims().setSubject(signInInfo.id().toString());
-        claims.put("role", signInInfo.role().name());
+    public String createAccessToken(SignInfoRequest signInfoRequest) {
+        Claims claims = Jwts.claims().setSubject(signInfoRequest.id().toString());
+        claims.put("role", signInfoRequest.role().name());
         Date now = new Date();
 
         String token = Jwts.builder()
@@ -61,23 +63,18 @@ public class JwtTokenProvider {
      * 토큰에서 SignInInfo 추출
      */
 
-    public SignInInfo getSignInInfoFromToken(String token) {
+    public SignInfoRequest getSignInInfoFromToken(String token) {
         try {
             Claims claims = Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token).getBody();
             Long userId = Long.valueOf(claims.getSubject());
             String roleStr = claims.get("role", String.class);
             Role role = Role.valueOf(roleStr);
             log.debug("Extracted userId: {}, role: {}", userId, roleStr);
-            return new SignInInfo(userId, role);
+            return new SignInfoRequest(userId, role);
         } catch (Exception e) {
             log.error("Error extracting SignInInfo from token: {}", e.getMessage());
             throw e;
         }
-    }
-
-
-    public void storeRefreshToken(String refreshToken, Long userId) {
-        redisTemplate.opsForValue().set(refreshToken, userId.toString(), expiration * 2, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -87,18 +84,30 @@ public class JwtTokenProvider {
      * @return
      */
 
-    public String createRefreshToken(Long userId) {
+    public String createRefreshToken(Long userId, Role role) {
+        Claims claims = Jwts.claims().setSubject(userId.toString());
+        claims.put("role", role.name());
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String signInfoJson = objectMapper.writeValueAsString(new SignInfoRequest(userId, role));
+            claims.put("signInInfo", signInfoJson);
+        } catch (JsonProcessingException e) {
+            log.error("Error converting SignInfoRequest to JSON: {}", e.getMessage());
+        }
+
         String refreshToken = Jwts.builder()
-                .setSubject(userId.toString())
+                .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 2))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
                 .compact();
 
         // Redis에 리프레시 토큰 저장
         redisTemplate.opsForValue().set(refreshToken, userId.toString(), expiration * 2, TimeUnit.MILLISECONDS);
         return refreshToken;
     }
+
 
     public boolean validateToken(String token) {
         try {
@@ -146,13 +155,21 @@ public class JwtTokenProvider {
                     .parseClaimsJws(refreshToken)
                     .getBody();
 
-            SignInInfo signInInfo = (SignInInfo) claims.get("signInInfo");
-            return signInInfo.role();
+            String signInfoJson = claims.get("signInInfo", String.class);
+            if (signInfoJson != null) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                SignInfoRequest signInfoRequest = objectMapper.readValue(signInfoJson, SignInfoRequest.class);
+                return signInfoRequest.role();
+            } else {
+                log.error("signInInfo is null in token");
+                return null;
+            }
         } catch (Exception e) {
             log.error("Error extracting role from token: {}", e.getMessage());
             return null;
         }
     }
+
 
     public void invalidateRefreshToken(String refreshToken) {
         redisTemplate.delete(refreshToken);

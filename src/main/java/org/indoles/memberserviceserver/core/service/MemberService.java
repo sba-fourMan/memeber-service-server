@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.indoles.memberserviceserver.core.dto.request.SignUpRequest;
 import org.indoles.memberserviceserver.core.domain.Member;
 import org.indoles.memberserviceserver.core.dto.request.SignInRequest;
-import org.indoles.memberserviceserver.core.dto.SignInInfo;
+import org.indoles.memberserviceserver.core.dto.response.SignInfoRequest;
 import org.indoles.memberserviceserver.core.infra.MemberCoreRepository;
 import org.indoles.memberserviceserver.global.exception.BadRequestException;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class MemberService {
         }
     }
 
-    public SignInInfo signIn(SignInRequest signInRequest) {
+    public SignInfoRequest signIn(SignInRequest signInRequest) {
         try {
             Member member = memberCoreRepository.findBySignInId(signInRequest.signInId())
                     .orElseThrow(() -> new BadRequestException(
@@ -52,7 +52,7 @@ public class MemberService {
                 throw new BadRequestException("패스워드가 일치하지 않습니다.", M003);
             }
 
-            return new SignInInfo(member.getId(), member.getRole());
+            return new SignInfoRequest(member.getId(), member.getRole());
         } catch (Exception e) {
             log.error("로그인 중 오류 발생", e);
             throw e;
