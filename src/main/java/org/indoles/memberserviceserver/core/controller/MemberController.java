@@ -2,6 +2,7 @@ package org.indoles.memberserviceserver.core.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.indoles.memberserviceserver.core.controller.interfaces.Login;
+import org.indoles.memberserviceserver.core.controller.interfaces.PublicAccess;
 import org.indoles.memberserviceserver.core.controller.interfaces.Roles;
 import org.indoles.memberserviceserver.core.domain.enums.Role;
 import org.indoles.memberserviceserver.core.dto.request.*;
@@ -26,6 +27,7 @@ public class MemberController {
      * 회원가입 API
      */
 
+    @PublicAccess
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(
             @RequestBody SignUpRequest request
@@ -39,6 +41,7 @@ public class MemberController {
      * 로그인 API
      */
 
+    @PublicAccess
     @PostMapping("/signin")
     public ResponseEntity<SignInResponse> signin(
             @RequestBody SignInRequest request
