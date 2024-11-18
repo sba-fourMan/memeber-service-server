@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.indoles.memberserviceserver.core.controller.interfaces.Login;
 import org.indoles.memberserviceserver.core.dto.request.*;
 import org.indoles.memberserviceserver.core.dto.response.RefundResponse;
-import org.indoles.memberserviceserver.core.dto.response.SignInfoRequest;
+import org.indoles.memberserviceserver.core.dto.request.SignInfoRequest;
 import org.indoles.memberserviceserver.core.dto.response.SignInResponse;
 import org.indoles.memberserviceserver.core.dto.response.TransferPointResponse;
 import org.indoles.memberserviceserver.core.service.MemberService;
@@ -61,7 +61,6 @@ public class MemberController {
     /**
      * 포인트 충전 API
      */
-
     @PostMapping("/points/charge")
     public ResponseEntity<Void> chargePoint(
             @Login SignInfoRequest signInfoRequest,

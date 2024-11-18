@@ -4,7 +4,6 @@ import org.indoles.memberserviceserver.core.context.ServiceTest;
 import org.indoles.memberserviceserver.core.domain.Member;
 import org.indoles.memberserviceserver.core.domain.enums.Role;
 import org.indoles.memberserviceserver.core.dto.response.SignInResponse;
-import org.indoles.memberserviceserver.core.dto.response.SignInfoRequest;
 import org.indoles.memberserviceserver.core.dto.request.SignInRequest;
 import org.indoles.memberserviceserver.core.dto.request.SignUpRequest;
 import org.indoles.memberserviceserver.global.exception.BadRequestException;
