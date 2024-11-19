@@ -1,6 +1,7 @@
 package org.indoles.memberserviceserver.core.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.indoles.memberserviceserver.core.controller.interfaces.Buyer;
 import org.indoles.memberserviceserver.core.controller.interfaces.Login;
 import org.indoles.memberserviceserver.core.controller.interfaces.PublicAccess;
 import org.indoles.memberserviceserver.core.controller.interfaces.Roles;
@@ -78,7 +79,7 @@ public class MemberController {
     /**
      * 경매 서버 - 입찰 시 포인트 전송을 위한 API
      */
-    @Roles({Role.BUYER, Role.SELLER})
+    @Buyer
     @PostMapping("/points/transfer")
     public ResponseEntity<TransferPointResponse> transferPoint(
             @Login SignInfoRequest signInfoRequest,
@@ -100,7 +101,8 @@ public class MemberController {
     /**
      * 경매 서버 - 환불 시 포인트 환불을 위한 API
      */
-    @Roles({Role.BUYER, Role.SELLER})
+
+    @Buyer
     @PostMapping("/points/refund")
     public ResponseEntity<RefundResponse> refundPoint(
             @Login SignInfoRequest signInfoRequest,
