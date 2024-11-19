@@ -84,9 +84,16 @@ public class MemberController {
             @Login SignInfoRequest signInfoRequest,
             @RequestBody TransferPointRequest transferPointRequest
     ) {
-        pointService.pointTransfer(signInfoRequest.id(), transferPointRequest.receiverId(), transferPointRequest.amount());
-        Long remainingPoints = pointService.getRemainingPoints(signInfoRequest.id());
-        TransferPointResponse response = new TransferPointResponse(signInfoRequest.id(), transferPointRequest.receiverId(), transferPointRequest.amount(), remainingPoints);
+        long senderId = signInfoRequest.id();
+
+        pointService.pointTransfer(senderId, transferPointRequest.receiverId(), transferPointRequest.amount());
+        Long remainingPoints = pointService.getRemainingPoints(senderId);
+
+        TransferPointResponse response = new TransferPointResponse(
+                senderId, transferPointRequest.receiverId(),
+                transferPointRequest.amount(),
+                remainingPoints
+        );
         return ResponseEntity.ok(response);
     }
 
@@ -100,9 +107,13 @@ public class MemberController {
             @RequestBody RefundRequest refundRequest
     ) {
         pointService.refundPoint(signInfoRequest.id(), refundRequest.receiverId(), refundRequest.amount());
-
         Long remainingPoints = pointService.getRemainingPoints(signInfoRequest.id());
-        RefundResponse response = new RefundResponse(signInfoRequest.id(), refundRequest.receiverId(), refundRequest.amount(), remainingPoints);
+
+        RefundResponse response = new RefundResponse(
+                signInfoRequest.id(),
+                refundRequest.receiverId(),
+                refundRequest.amount(),
+                remainingPoints);
 
         return ResponseEntity.ok(response);
     }
