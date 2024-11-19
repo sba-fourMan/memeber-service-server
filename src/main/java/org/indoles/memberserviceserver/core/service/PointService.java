@@ -7,6 +7,7 @@ import org.indoles.memberserviceserver.core.domain.Member;
 import org.indoles.memberserviceserver.core.dto.request.SignInfoRequest;
 import org.indoles.memberserviceserver.core.infra.MemberCoreRepository;
 import org.indoles.memberserviceserver.global.exception.BadRequestException;
+import org.indoles.memberserviceserver.global.exception.ErrorCode;
 import org.indoles.memberserviceserver.global.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +45,10 @@ public class PointService {
         try {
             Member sender = findMemberObject(senderId);
             Member recipient = findMemberObject(receiverId);
+
+            if (sender.getPoint().getAmount() < amount) {
+                throw new BadRequestException("포인트가 부족합니다. 사용자의 잔여 포인트: " + sender.getPoint().getAmount(), ErrorCode.P001);
+            }
 
             sender.pointTransfer(recipient, amount);
             log.debug("  - Member.{}의 포인트 {}원을 Member.{} 에게 전달합니다.", sender.getId(), amount, receiverId);
