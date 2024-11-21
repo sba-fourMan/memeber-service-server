@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     writeFile file: 'src/main/resources/application.yml', text: '''\
-aws
+aws:
   paramstore:
     enabled: true
     prefix: /
