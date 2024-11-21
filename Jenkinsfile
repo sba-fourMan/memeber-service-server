@@ -21,6 +21,11 @@ pipeline {
             steps {
                 script {
                     writeFile file: 'src/main/resources/application.yml', text: '''\
+aws
+  paramstore:
+    enabled: true
+    prefix: /
+
 server:
   port: ${/member/server/port}
 
