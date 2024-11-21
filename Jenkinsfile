@@ -29,13 +29,13 @@ aws:
     prefix: /
 
 server:
-  port: ${/member/server/port}
+  port: ${PORT}
 
 spring:
   datasource:
-    url: ${/member/db/url}
-    username: ${/db/username}
-    password: ${/db/password}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -49,11 +49,11 @@ spring:
 
   data:
     redis:
-      host: ${/member/redis/host}
+      host: ${REDIS_HOST}
       port: 6379
 
 jwt:
-  secret: ${/jwt/secret}
+  secret: ${JWT_SECRET}
   expiration: 86400000
   header: Authorization
   prefix: Bearer
