@@ -21,13 +21,12 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    cd memeber-service-server
                     echo "aws:\n  paramstore:\n    enabled: true\n    prefix: /member" > src/main/resources/application.yml
                     '''
                 }
             }
         }
-        
+
         stage('Build JAR File') {
             steps {
                 sh './gradlew build -x test'
