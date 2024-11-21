@@ -17,7 +17,7 @@ pipeline {
             }
         }
 
-        stage('Modify application.yml')
+        stage('Modify application.yml') {
             steps {
                 script {
                     sh '''
@@ -26,7 +26,8 @@ pipeline {
                     '''
                 }
             }
-
+        }
+        
         stage('Build JAR File') {
             steps {
                 sh './gradlew build -x test'
