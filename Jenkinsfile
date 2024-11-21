@@ -20,7 +20,7 @@ pipeline {
         stage('Modify application.yml') {
             steps {
                 script {
-                    writeFile file: 'src/main/resources/application.yml', text: """
+                    writeFile file: 'src/main/resources/application.yml', text: '''\
 server:
   port: ${/member/server/port}
 
@@ -51,7 +51,7 @@ jwt:
   header: Authorization
   prefix: Bearer
   type: JWT
-"""
+'''
                 }
             }
         }
