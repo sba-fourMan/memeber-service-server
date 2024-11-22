@@ -22,12 +22,6 @@ pipeline {
                 script {
                     writeFile file: 'src/main/resources/application.yml', text: '''\
 
-aws:
-  paramstore:
-    enabled: true
-    region: ap-northeast-2
-    prefix: /
-
 server:
   port: ${PORT}
 
