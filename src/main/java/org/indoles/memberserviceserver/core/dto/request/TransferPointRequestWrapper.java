@@ -1,4 +1,4 @@
-package org.indoles.autionserviceserver.core.auction.dto.Request;
+package org.indoles.memberserviceserver.core.dto.request;
 
 public record TransferPointRequestWrapper(
         SignInfoRequest signInfoRequest,
