@@ -5,14 +5,14 @@ services:
     build:
       context: /Dockerfile 경로  # Dockerfile이 있는 경로
     ports:
-      - 9090:8080  # Spring Boot 애플리케이션 포트
+      - 7070:7070  # Spring Boot 애플리케이션 포트
     networks:
       - monitoring
 
   prometheus:
     image: prom/prometheus
     ports:
-      - 10000:8080  # Prometheus를 10000 포트로 노출
+      - 10000:7070  # Prometheus를 10000 포트로 노출
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     command:
