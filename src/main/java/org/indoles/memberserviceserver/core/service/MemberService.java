@@ -57,9 +57,9 @@ public class MemberService {
 
             SignInfoRequest signInfoRequest = new SignInfoRequest(member.getId(), member.getRole());
             String accessToken = jwtTokenProvider.createAccessToken(signInfoRequest);
-            String refreshToken = jwtTokenProvider.createRefreshToken(signInfoRequest.id(), signInfoRequest.role());
+            jwtTokenProvider.createRefreshToken(signInfoRequest.id(), signInfoRequest.role());
 
-            return new SignInResponse(signInfoRequest.role(), accessToken, refreshToken);
+            return new SignInResponse(signInfoRequest.role(), accessToken);
         } catch (Exception e) {
             log.error("로그인 중 오류 발생", e);
             throw e;
