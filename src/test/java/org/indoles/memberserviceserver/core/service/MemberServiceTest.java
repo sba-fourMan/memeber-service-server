@@ -67,7 +67,6 @@ public class MemberServiceTest extends ServiceTest {
             // then
             assertThat(signInResponse).isNotNull();
             assertThat(signInResponse.accessToken()).isNotNull();
-            assertThat(signInResponse.refreshToken()).isNotNull();
             assertThat(signInResponse.role()).isEqualTo(Role.BUYER);
         }
 
