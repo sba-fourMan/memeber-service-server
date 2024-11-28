@@ -79,20 +79,19 @@ public class MemberController {
     /**
      * 경매 서버 - 입찰 시 포인트 전송을 위한 API
      */
-    @Buyer
     @PostMapping("/points/transfer")
     public ResponseEntity<TransferPointResponse> transferPoint(
-            @Login SignInfoRequest signInfoRequest,
-            @RequestBody TransferPointRequest transferPointRequest
-    ) {
-        long senderId = signInfoRequest.id();
+            @RequestBody TransferPointRequestWrapper requestWrapper
 
-        pointService.pointTransfer(senderId, transferPointRequest.receiverId(), transferPointRequest.amount());
+    ) {
+        long senderId = requestWrapper.signInfoRequest().id();
+
+        pointService.pointTransfer(senderId, requestWrapper.transferPointRequest().receiverId(), requestWrapper.transferPointRequest().amount());
         Long remainingPoints = pointService.getRemainingPoints(senderId);
 
         TransferPointResponse response = new TransferPointResponse(
-                senderId, transferPointRequest.receiverId(),
-                transferPointRequest.amount(),
+                senderId, requestWrapper.transferPointRequest().receiverId(),
+                requestWrapper.transferPointRequest().amount(),
                 remainingPoints
         );
         return ResponseEntity.ok(response);
@@ -102,20 +101,19 @@ public class MemberController {
      * 경매 서버 - 환불 시 포인트 환불을 위한 API
      */
 
-    @Buyer
     @PostMapping("/points/refund")
     public ResponseEntity<RefundResponse> refundPoint(
-            @Login SignInfoRequest signInfoRequest,
-            @RequestBody RefundRequest refundRequest
+            @RequestBody RefundPointRequestWrapper requestWrapper
     ) {
-        pointService.refundPoint(signInfoRequest.id(), refundRequest.receiverId(), refundRequest.amount());
-        Long remainingPoints = pointService.getRemainingPoints(signInfoRequest.id());
+        pointService.refundPoint(requestWrapper.signInfoRequest().id(), requestWrapper.refundPointRequest().receiverId(), requestWrapper.refundPointRequest().amount());
+        Long remainingPoints = pointService.getRemainingPoints(requestWrapper.signInfoRequest().id());
 
         RefundResponse response = new RefundResponse(
-                signInfoRequest.id(),
-                refundRequest.receiverId(),
-                refundRequest.amount(),
-                remainingPoints);
+                requestWrapper.signInfoRequest().id(),
+                requestWrapper.refundPointRequest().receiverId(),
+                requestWrapper.refundPointRequest().amount(),
+                remainingPoints
+        );
 
         return ResponseEntity.ok(response);
     }
